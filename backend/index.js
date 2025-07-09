@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
+const departments = require('./routes/departments');
+
 require('dotenv').config();
 
 const app = express();
@@ -15,6 +17,8 @@ app.use(
 );
 
 app.use(bodyParser.json());
+
+app.use('/api', departments);
 
 app.listen(PORT, () => {
   console.log(`app run in port: ${PORT}`);
