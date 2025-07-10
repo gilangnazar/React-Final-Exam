@@ -67,4 +67,17 @@ router.delete('/departments/:department_id', async (req, res) => {
   }
 });
 
+router.put('/departments/:department_id/restore', async (req, res) => {
+  try {
+    const { department_id } = req.params;
+    if (!department_id) return res.status(400).json({ msg: 'Department ID Is Invalid or Missing' });
+
+    await db.execute('UPDATE departments SET deleted_at = NULL WHERE department_id = ?', [department_id]);
+
+    return res.json({ msg: 'Department berhasil direstore' });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Server error', err: error.message });
+  }
+});
+
 module.exports = router;
