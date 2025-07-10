@@ -5,7 +5,9 @@ const router = express.Router();
 
 router.get('/departments', async (req, res) => {
   try {
-    const [data] = await db.execute('SELECT * FROM departments');
+    const [data] = await db.execute(
+      'SELECT * FROM departments WHERE deleted_at IS NULL ORDER BY department_id DESC'
+    );
 
     res.status(200).json({
       msg: 'Data berhasil diambil',
