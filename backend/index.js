@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const departments = require('./routes/departments');
+const doctors = require('./routes/doctors');
 
 require('dotenv').config();
 
@@ -19,6 +20,7 @@ app.use(
 app.use(bodyParser.json());
 
 app.use('/api', departments);
+app.use('/api', doctors);
 
 app.listen(PORT, () => {
   console.log(`app run in port: ${PORT}`);
