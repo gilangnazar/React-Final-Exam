@@ -5,7 +5,19 @@ const router = express.Router();
 
 router.get('/doctors', async (req, res) => {
   try {
-    const [data] = await db.execute('SELECT * FROM doctors WHERE deleted_at IS NULL ORDER BY doctor_id DESC');
+    const query = `SELECT 
+doc.doctor_id,
+u.full_name AS doctor_name,
+dep.name AS department_name,
+doc.specialization,
+doc.user_id
+FROM doctors doc
+JOIN departments dep ON doc.department_id = dep.department_id AND dep.deleted_at IS NULL
+JOIN users u ON doc.user_id = u.user_id AND u.deleted_at IS NULL
+WHERE doc.deleted_at IS NULL
+ORDER BY doc.doctor_id DESC;`;
+
+    const [data] = await db.execute(query);
 
     res.status(200).json({
       msg: 'Data berhasil diambil',
