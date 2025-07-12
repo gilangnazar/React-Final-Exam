@@ -99,11 +99,6 @@ export default function LoginPage() {
                 }}
               />
             </Form.Group>
-            <div className="text-end mb-3">
-              <a href="#" style={{ fontSize: "0.9rem" }}>
-                Forgot Password
-              </a>
-            </div>
             <Button
               type="submit"
               className="w-100"

@@ -82,8 +82,8 @@ export default function Doctors() {
         <thead>
           <tr>
             <th>No</th>
-            <th>User ID</th>
-            <th>Department ID</th>
+            <th>Nama Dokter</th>
+            <th>Department Name</th>
             <th>Specialization</th>
             <th>Aksi</th>
           </tr>
@@ -92,8 +92,8 @@ export default function Doctors() {
           {doctors.map((doctor, index) => (
             <tr key={doctor.doctor_id}>
               <td>{index + 1}</td>
-              <td>{doctor.user_id}</td>
-              <td>{doctor.department_id}</td>
+              <td>{doctor.doctor_name}</td>
+              <td>{doctor.department_name}</td>
               <td>{doctor.specialization}</td>
               <td>
                 <Button
