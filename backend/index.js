@@ -7,6 +7,7 @@ const doctors = require('./routes/doctors');
 const medicines = require('./routes/medicines');
 const users = require('./routes/users');
 const roles = require('./routes/roles');
+const patients = require('./routes/patients');
 
 require('dotenv').config();
 
@@ -27,6 +28,7 @@ app.use('/api', doctors);
 app.use('/api', medicines);
 app.use('/api', users);
 app.use('/api', roles);
+app.use('/api', patients);
 
 app.listen(PORT, () => {
   console.log(`app run in port: ${PORT}`);
