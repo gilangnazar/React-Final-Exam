@@ -68,4 +68,26 @@ router.put('/patients/:user_id/profile', async (req, res) => {
   }
 });
 
+
+
+router.post('/patients/daftaronline', async (req, res) => {
+  try {
+    const { patient_id, schedule_date, department_id, doctor_id } = req.body;
+
+    if (!patient_id || !schedule_date || !department_id || !doctor_id)
+      return res.status(400).json({ msg: 'Incomplete data' });
+
+    const status = 'waiting';
+
+    await db.execute(
+      'INSERT INTO appointments(patient_id, schedule_date, department_id, doctor_id, status) VALUES(?,?,?,?,?)',
+      [patient_id, schedule_date, department_id, doctor_id, status]
+    );
+
+    return res.status(201).json({ msg: 'Berhasil melakukan daftar online' });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Server error', err: error });
+  }
+});
+
 module.exports = router;
