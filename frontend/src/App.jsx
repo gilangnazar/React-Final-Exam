@@ -1,35 +1,116 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import DashboardPage from "./pages/DashboardPage";
+import PendaftaranPage from "./pages/PendaftaranPage";
+import KedatanganPage from "./pages/KedatanganPage";
+import AntrianPage from "./pages/AntrianPage";
+import PemeriksaanPage from "./pages/PemeriksaanPage";
+import PembayaranPage from "./pages/PembayaranPage";
+import PengambilanObatPage from "./pages/PengambilanObatPage";
+import ManajemenUserPage from "./pages/ManajemenUserPage";
+import LoginPage from "./pages/LoginPage";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Administrasi RumahSakit</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+// Komponen PrivateRoute
+function PrivateRoute({ children }) {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  return isLoggedIn ? children : <Navigate to="/login" replace />;
 }
 
-export default App
+export default function App() {
+  const location = useLocation();
+
+  // Jika path sekarang "/login", tampilkan login page TANPA sidebar
+  if (location.pathname === "/login") {
+    return (
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        {/* Redirect semua path lain ke login */}
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    );
+  }
+
+  // Layout dengan sidebar dan semua halaman yang diproteksi
+  return (
+    <Container fluid>
+      <Row className="vh-100">
+        <Col md={2} className="p-0 bg-dark">
+          <Sidebar />
+        </Col>
+        <Col md={10} className="p-4">
+          <Routes>
+            {/* Bungkus semua rute di PrivateRoute */}
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <DashboardPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/pendaftaran"
+              element={
+                <PrivateRoute>
+                  <PendaftaranPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/kedatangan"
+              element={
+                <PrivateRoute>
+                  <KedatanganPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/antrian"
+              element={
+                <PrivateRoute>
+                  <AntrianPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/pemeriksaan"
+              element={
+                <PrivateRoute>
+                  <PemeriksaanPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/pembayaran"
+              element={
+                <PrivateRoute>
+                  <PembayaranPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/pengambilan-obat"
+              element={
+                <PrivateRoute>
+                  <PengambilanObatPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/manajemen-user"
+              element={
+                <PrivateRoute>
+                  <ManajemenUserPage />
+                </PrivateRoute>
+              }
+            />
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </Col>
+      </Row>
+    </Container>
+  );
+}
