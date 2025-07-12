@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 
 const departments = require('./routes/departments');
 const doctors = require('./routes/doctors');
+const medicines = require('./routes/medicines');
+const users = require('./routes/users');
 
 require('dotenv').config();
 
@@ -21,6 +23,8 @@ app.use(bodyParser.json());
 
 app.use('/api', departments);
 app.use('/api', doctors);
+app.use('/api', medicines);
+app.use('/api', users);
 
 app.listen(PORT, () => {
   console.log(`app run in port: ${PORT}`);
