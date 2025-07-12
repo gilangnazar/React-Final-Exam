@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 12, 2025 at 09:00 AM
+-- Generation Time: Jul 12, 2025 at 12:40 PM
 -- Server version: 8.0.30
 -- PHP Version: 7.4.13
 
@@ -43,7 +43,8 @@ CREATE TABLE `appointments` (
 
 INSERT INTO `appointments` (`appointment_id`, `patient_id`, `schedule_date`, `department_id`, `doctor_id`, `status`, `created_at`) VALUES
 (1, 1, '2025-07-08', 1, 1, 'waiting', '2025-07-07 07:37:21'),
-(2, 2, '2025-07-09', 3, 2, 'confirmed', '2025-07-07 07:37:21');
+(2, 2, '2025-07-09', 3, 2, 'confirmed', '2025-07-07 07:37:21'),
+(3, 3, '2025-07-08', 1, 1, 'waiting', '2025-07-12 12:26:08');
 
 -- --------------------------------------------------------
 
@@ -180,7 +181,8 @@ CREATE TABLE `patients` (
 
 INSERT INTO `patients` (`patient_id`, `user_id`, `nik`, `gender`, `birth_date`, `phone`, `address`) VALUES
 (1, 4, '3201012345670001', 'L', '1990-05-10', '081234567890', 'Jl. Merdeka No.1'),
-(2, 5, '3201012345670002', 'P', '1995-08-20', '082345678901', 'Jl. Sudirman No.2');
+(2, 5, '3201012345670002', 'P', '1995-08-20', '082345678901', 'Jl. Sudirman No.2'),
+(3, 11, '32123456', 'L', '2001-05-05', '0895', 'Bogor');
 
 -- --------------------------------------------------------
 
@@ -276,20 +278,22 @@ INSERT INTO `queues` (`queue_id`, `appointment_id`, `queue_number`, `status`, `c
 
 CREATE TABLE `roles` (
   `role_id` int NOT NULL,
-  `role_name` varchar(50) DEFAULT NULL
+  `role_name` varchar(50) DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `roles`
 --
 
-INSERT INTO `roles` (`role_id`, `role_name`) VALUES
-(1, 'admin'),
-(2, 'dokter'),
-(3, 'pasien'),
-(4, 'apoteker'),
-(5, 'kasir'),
-(6, 'pendaftaran');
+INSERT INTO `roles` (`role_id`, `role_name`, `deleted_at`) VALUES
+(1, 'admin', NULL),
+(2, 'dokter', NULL),
+(3, 'pasien', NULL),
+(4, 'apoteker', NULL),
+(5, 'kasir', NULL),
+(6, 'pendaftaran', NULL),
+(7, 'Office Girl', '2025-07-12 09:47:08');
 
 -- --------------------------------------------------------
 
@@ -304,23 +308,26 @@ CREATE TABLE `users` (
   `full_name` varchar(100) DEFAULT NULL,
   `role_id` int DEFAULT NULL,
   `status` enum('active','inactive') DEFAULT 'active',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `password_hash`, `full_name`, `role_id`, `status`, `created_at`) VALUES
-(1, 'admin1', 'hashed_admin_pw', 'Admin Rumah Sakit', 1, 'active', '2025-07-07 07:37:21'),
-(2, 'drjoko', 'hashed_dokter_pw', 'Dr. Joko', 2, 'active', '2025-07-07 07:37:21'),
-(3, 'drsinta', 'hashed_dokter_pw2', 'Dr. Sinta', 2, 'active', '2025-07-07 07:37:21'),
-(4, 'budi123', 'hashed_pasien_pw', 'Budi Santoso', 3, 'active', '2025-07-07 07:37:21'),
-(5, 'sari567', 'hashed_pasien_pw2', 'Sari Lestari', 3, 'active', '2025-07-07 07:37:21'),
-(6, 'apotek1', 'hashed_apoteker_pw', 'Apoteker Andi', 4, 'active', '2025-07-07 07:37:21'),
-(7, 'kasir1', 'hashed_kasir_pw', 'Kasir Rina', 5, 'active', '2025-07-07 07:37:21'),
-(8, 'daftar1', 'hashed_pendaftaran_pw', 'Pendaftaran Wati', 6, 'active', '2025-07-07 07:37:21'),
-(9, 'drjatmiko', 'hashed_dokter_pw', 'Dr. Jatmiko', 2, 'active', '2025-07-07 07:37:21');
+INSERT INTO `users` (`user_id`, `username`, `password_hash`, `full_name`, `role_id`, `status`, `created_at`, `deleted_at`) VALUES
+(1, 'admin1', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'Admin Rumah Sakit', 1, 'active', '2025-07-07 07:37:21', NULL),
+(2, 'drjoko', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'Dr. Joko', 2, 'active', '2025-07-07 07:37:21', NULL),
+(3, 'gilangacc', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'gilangacchadipa', 6, 'active', '2025-07-07 07:37:21', NULL),
+(4, 'budi123', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'Budi Santoso', 3, 'active', '2025-07-07 07:37:21', NULL),
+(5, 'sari567', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'Sari Lestari', 3, 'active', '2025-07-07 07:37:21', NULL),
+(6, 'apotek1', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'Apoteker Andi', 4, 'active', '2025-07-07 07:37:21', NULL),
+(7, 'kasir1', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'Kasir Rina', 5, 'active', '2025-07-07 07:37:21', NULL),
+(8, 'daftar1', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'Pendaftaran Wati', 6, 'active', '2025-07-07 07:37:21', NULL),
+(9, 'drjatmiko', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'Dr. Jatmiko', 2, 'active', '2025-07-07 07:37:21', NULL),
+(10, 'daftargilangnz', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'gilangnazar', 6, 'active', '2025-07-12 09:28:08', NULL),
+(11, 'pasien7', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'hansolo', 3, 'active', '2025-07-12 11:25:10', NULL);
 
 -- --------------------------------------------------------
 
@@ -457,7 +464,7 @@ ALTER TABLE `user_access_logs`
 -- AUTO_INCREMENT for table `appointments`
 --
 ALTER TABLE `appointments`
-  MODIFY `appointment_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `appointment_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -493,7 +500,7 @@ ALTER TABLE `medicine_pickups`
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `patient_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `patient_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -523,13 +530,13 @@ ALTER TABLE `queues`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `role_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `role_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user_access_logs`
