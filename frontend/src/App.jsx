@@ -4,6 +4,7 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import DashboardPage from "./pages/DashboardPage";
 import PendaftaranPage from "./pages/PendaftaranPage";
+import Doctors from "./pages/Doctors";
 import KedatanganPage from "./pages/KedatanganPage";
 import AntrianPage from "./pages/AntrianPage";
 import PemeriksaanPage from "./pages/PemeriksaanPage";
@@ -55,6 +56,14 @@ export default function App() {
               element={
                 <PrivateRoute>
                   <PendaftaranPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/doctors"
+              element={
+                <PrivateRoute>
+                  <Doctors />
                 </PrivateRoute>
               }
             />

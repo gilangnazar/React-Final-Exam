@@ -16,6 +16,7 @@ const Sidebar = () => {
     { label: "Dashboard", path: "/", icon: <FaChartLine /> },
     { label: "Pendaftaran", path: "/pendaftaran", icon: <GiArchiveRegister /> },
     { label: "Kedatangan", path: "/kedatangan", icon: <FaUserCheck /> },
+    { label: "Doctors", path: "/Doctors", icon: <FaUserCheck /> },
     { label: "Antrian", path: "/antrian", icon: <FaListOl /> },
     { label: "Pemeriksaan", path: "/pemeriksaan", icon: <FaStethoscope /> },
     { label: "Pembayaran", path: "/pembayaran", icon: <FaMoneyBill /> },
