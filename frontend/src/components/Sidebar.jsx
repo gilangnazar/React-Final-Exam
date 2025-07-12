@@ -9,6 +9,7 @@ import {
   FaPills,
 } from "react-icons/fa";
 import { FaChartLine, FaUserCheck, FaUsersGear, FaUserDoctor } from "react-icons/fa6";
+import { BsBuildingsFill } from "react-icons/bs";
 import { GiArchiveRegister } from "react-icons/gi";
 
 const Sidebar = () => {
@@ -17,6 +18,7 @@ const Sidebar = () => {
     { label: "Pendaftaran", path: "/pendaftaran", icon: <GiArchiveRegister /> },
     { label: "Kedatangan", path: "/kedatangan", icon: <FaUserCheck /> },
     { label: "Doctors", path: "/Doctors", icon: <FaUserDoctor /> },
+    { label: "Departments", path: "/Departments", icon: <BsBuildingsFill /> },
     { label: "Antrian", path: "/antrian", icon: <FaListOl /> },
     { label: "Pemeriksaan", path: "/pemeriksaan", icon: <FaStethoscope /> },
     { label: "Pembayaran", path: "/pembayaran", icon: <FaMoneyBill /> },

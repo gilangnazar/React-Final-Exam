@@ -5,6 +5,7 @@ import Sidebar from "./components/Sidebar";
 import DashboardPage from "./pages/DashboardPage";
 import PendaftaranPage from "./pages/PendaftaranPage";
 import Doctors from "./pages/Doctors";
+import Departments from "./pages/Departments";
 import KedatanganPage from "./pages/KedatanganPage";
 import AntrianPage from "./pages/AntrianPage";
 import PemeriksaanPage from "./pages/PemeriksaanPage";
@@ -64,6 +65,14 @@ export default function App() {
               element={
                 <PrivateRoute>
                   <Doctors />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/Departments"
+              element={
+                <PrivateRoute>
+                  <Departments />
                 </PrivateRoute>
               }
             />
