@@ -8,6 +8,7 @@ const medicines = require('./routes/medicines');
 const users = require('./routes/users');
 const roles = require('./routes/roles');
 const patients = require('./routes/patients');
+const auth = require('./routes/auth');
 
 require('dotenv').config();
 
@@ -29,6 +30,7 @@ app.use('/api', medicines);
 app.use('/api', users);
 app.use('/api', roles);
 app.use('/api', patients);
+app.use('/api', auth);
 
 app.listen(PORT, () => {
   console.log(`app run in port: ${PORT}`);
