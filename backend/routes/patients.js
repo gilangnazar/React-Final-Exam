@@ -47,4 +47,25 @@ router.post('/patients/:user_id/profile', async (req, res) => {
   }
 });
 
+router.put('/patients/:user_id/profile', async (req, res) => {
+  try {
+    const { nik, gender, birth_date, phone, address } = req.body;
+    const { user_id } = req.params;
+
+    if (!nik || !gender || !birth_date || !phone || !address)
+      return res.status(400).json({ msg: 'Incomplete data' });
+
+    if (!user_id) return res.status(400).json({ msg: 'User ID is invalid or deleted' });
+
+    await db.execute(
+      'UPDATE patients SET nik = ?, gender = ?, birth_date = ?, phone = ?, address = ? WHERE user_id = ?',
+      [nik, gender, birth_date, phone, address, user_id]
+    );
+
+    return res.status(201).json({ msg: 'Berhasil edit data Profile Pasien' });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Server error', err: error });
+  }
+});
+
 module.exports = router;
