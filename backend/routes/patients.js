@@ -68,7 +68,26 @@ router.put('/patients/:user_id/profile', async (req, res) => {
   }
 });
 
+router.get('/patients/daftaronline/:patient_id', async (req, res) => {
+  try {
+    const { patient_id } = req.params;
 
+    const [data] = await db.execute(
+      'SELECT * FROM appointments WHERE patient_id = ? ORDER BY department_id DESC',
+      [patient_id]
+    );
+
+    res.status(200).json({
+      msg: `Data berhasil diambil, pasien: ${patient_id}`,
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: 'Server error',
+      err: error,
+    });
+  }
+});
 
 router.post('/patients/daftaronline', async (req, res) => {
   try {
