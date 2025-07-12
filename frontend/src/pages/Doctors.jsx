@@ -1,7 +1,7 @@
 // src/pages/Doctors.jsx
 import React, { useEffect, useState } from "react";
-import { Table, Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
+import { Table, Button, Modal, Form } from "react-bootstrap";
 
 export default function Doctors() {
   const [doctors, setDoctors] = useState([]);
@@ -11,44 +11,63 @@ export default function Doctors() {
     department_id: "",
     specialization: ""
   });
+  const [editingId, setEditingId] = useState(null);
 
-  const API_URL = "http://localhost:4000/api/doctors";
+  const fetchDoctors = async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/api/doctors");
+      setDoctors(res.data.data);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    }
+  };
 
-  // Ambil data dokter saat halaman dibuka
   useEffect(() => {
     fetchDoctors();
   }, []);
 
-  const fetchDoctors = async () => {
+  const handleDelete = async (id) => {
+    if (!window.confirm("Yakin hapus data ini?")) return;
     try {
-      const response = await axios.get(API_URL);
-      console.log("DATA DOKTER =>", response.data);
-      setDoctors(response.data.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+      await axios.delete(`http://localhost:4000/api/doctors/${id}`);
+      fetchDoctors();
+    } catch (err) {
+      console.error("Error deleting:", err);
     }
   };
 
-  const handleChange = (e) => {
+  const handleEdit = (doctor) => {
     setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
+      user_id: doctor.user_id,
+      department_id: doctor.department_id,
+      specialization: doctor.specialization
     });
+    setEditingId(doctor.doctor_id);
+    setShowModal(true);
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(API_URL, formData);
-      fetchDoctors(); // refresh data
+      if (editingId) {
+        await axios.put(`http://localhost:4000/api/doctors/${editingId}`, formData);
+      } else {
+        await axios.post("http://localhost:4000/api/doctors", formData);
+      }
       setShowModal(false);
+      setEditingId(null);
       setFormData({
         user_id: "",
         department_id: "",
         specialization: ""
       });
-    } catch (error) {
-      console.error("Error adding doctor:", error);
+      fetchDoctors();
+    } catch (err) {
+      console.error("Error saving:", err);
     }
   };
 
@@ -56,9 +75,7 @@ export default function Doctors() {
     <div>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3>Data Dokter</h3>
-        <Button variant="primary" onClick={() => setShowModal(true)}>
-          Tambah Dokter
-        </Button>
+        <Button onClick={() => { setShowModal(true); setEditingId(null); }}>Tambah Dokter</Button>
       </div>
 
       <Table striped bordered hover>
@@ -68,43 +85,41 @@ export default function Doctors() {
             <th>User ID</th>
             <th>Department ID</th>
             <th>Specialization</th>
-            <th>Deleted At</th>
             <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
-          {doctors && doctors.length > 0 ? (
-            doctors.map((doctor, index) => (
-              <tr key={doctor.doctor_id}>
-                <td>{index + 1}</td>
-                <td>{doctor.user_id}</td>
-                <td>{doctor.department_id}</td>
-                <td>{doctor.specialization}</td>
-                <td>{doctor.deleted_at ? doctor.deleted_at : "-"}</td>
-                <td>
-                  <Button variant="warning" size="sm" className="me-2">
-                    Edit
-                  </Button>
-                  <Button variant="danger" size="sm">
-                    Hapus
-                  </Button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="text-center">
-                Tidak ada data dokter.
+          {doctors.map((doctor, index) => (
+            <tr key={doctor.doctor_id}>
+              <td>{index + 1}</td>
+              <td>{doctor.user_id}</td>
+              <td>{doctor.department_id}</td>
+              <td>{doctor.specialization}</td>
+              <td>
+                <Button
+                  variant="warning"
+                  size="sm"
+                  onClick={() => handleEdit(doctor)}
+                  className="me-2"
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDelete(doctor.doctor_id)}
+                >
+                  Hapus
+                </Button>
               </td>
             </tr>
-          )}
+          ))}
         </tbody>
       </Table>
 
-      {/* Modal Tambah Dokter */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Tambah Dokter</Modal.Title>
+          <Modal.Title>{editingId ? "Edit Dokter" : "Tambah Dokter"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
@@ -128,7 +143,7 @@ export default function Doctors() {
                 required
               />
             </Form.Group>
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-2">
               <Form.Label>Specialization</Form.Label>
               <Form.Control
                 type="text"
