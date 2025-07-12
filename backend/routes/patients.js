@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 
 router.post('/patients/register', async (req, res) => {
-  console.log('masuk regis pasien');
   try {
     const { username, password, full_name } = req.body;
 
@@ -22,6 +21,27 @@ router.post('/patients/register', async (req, res) => {
     ]);
 
     return res.status(201).json({ msg: 'Data Pasien Baru berhasil dibuat' });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Server error', err: error });
+  }
+});
+
+router.post('/patients/:user_id/profile', async (req, res) => {
+  try {
+    const { nik, gender, birth_date, phone, address } = req.body;
+    const { user_id } = req.params;
+
+    if (!nik || !gender || !birth_date || !phone || !address)
+      return res.status(400).json({ msg: 'Incomplete data' });
+
+    if (!user_id) return res.status(400).json({ msg: 'User ID is invalid or deleted' });
+
+    await db.execute(
+      'INSERT INTO patients(user_id, nik, gender, birth_date, phone, address) VALUES(?,?,?,?,?,?)',
+      [user_id, nik, gender, birth_date, phone, address]
+    );
+
+    return res.status(201).json({ msg: 'Berhasil menambahkan data Profile Pasien' });
   } catch (error) {
     return res.status(500).json({ msg: 'Server error', err: error });
   }
