@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 07, 2025 at 07:42 AM
+-- Generation Time: Jul 12, 2025 at 09:00 AM
 -- Server version: 8.0.30
 -- PHP Version: 7.4.13
 
@@ -54,17 +54,19 @@ INSERT INTO `appointments` (`appointment_id`, `patient_id`, `schedule_date`, `de
 CREATE TABLE `departments` (
   `department_id` int NOT NULL,
   `name` varchar(100) DEFAULT NULL,
-  `description` text
+  `description` text,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `departments`
 --
 
-INSERT INTO `departments` (`department_id`, `name`, `description`) VALUES
-(1, 'Umum', 'Pelayanan umum dan pemeriksaan dasar'),
-(2, 'Gigi', 'Poli khusus gigi dan mulut'),
-(3, 'Anak', 'Spesialisasi anak-anak');
+INSERT INTO `departments` (`department_id`, `name`, `description`, `deleted_at`) VALUES
+(1, 'Umum', 'Pelayanan umum dan pemeriksaan dasar', NULL),
+(2, 'Gigi', 'Poli khusus gigi dan mulut', NULL),
+(3, 'Anak', 'Spesialisasi anak-anak', NULL),
+(4, 'Neuro', 'Poli khusus Otak', NULL);
 
 -- --------------------------------------------------------
 
@@ -76,16 +78,18 @@ CREATE TABLE `doctors` (
   `doctor_id` int NOT NULL,
   `user_id` int DEFAULT NULL,
   `department_id` int DEFAULT NULL,
-  `specialization` varchar(100) DEFAULT NULL
+  `specialization` varchar(100) DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `doctors`
 --
 
-INSERT INTO `doctors` (`doctor_id`, `user_id`, `department_id`, `specialization`) VALUES
-(1, 2, 1, 'Dokter Umum'),
-(2, 3, 3, 'Dokter Anak');
+INSERT INTO `doctors` (`doctor_id`, `user_id`, `department_id`, `specialization`, `deleted_at`) VALUES
+(1, 2, 1, 'Dokter Umum', NULL),
+(2, 3, 3, 'Dokter Anak', NULL),
+(3, 9, 2, 'Bedah', NULL);
 
 -- --------------------------------------------------------
 
@@ -120,18 +124,19 @@ CREATE TABLE `medicines` (
   `medicine_id` int NOT NULL,
   `name` varchar(100) DEFAULT NULL,
   `stock` int DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL
+  `price` decimal(10,2) DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `medicines`
 --
 
-INSERT INTO `medicines` (`medicine_id`, `name`, `stock`, `price`) VALUES
-(1, 'Paracetamol', 100, 5000.00),
-(2, 'Amoxicillin', 50, 10000.00),
-(3, 'Vitamin C', 75, 3000.00),
-(4, 'Ibuprofen', 40, 7000.00);
+INSERT INTO `medicines` (`medicine_id`, `name`, `stock`, `price`, `deleted_at`) VALUES
+(1, 'Paracetamol', 100, 5000.00, NULL),
+(2, 'Amoxicillin', 50, 10000.00, NULL),
+(3, 'Vitamin C', 75, 3000.00, NULL),
+(4, 'Ibuprofen', 40, 7000.00, NULL);
 
 -- --------------------------------------------------------
 
@@ -314,7 +319,8 @@ INSERT INTO `users` (`user_id`, `username`, `password_hash`, `full_name`, `role_
 (5, 'sari567', 'hashed_pasien_pw2', 'Sari Lestari', 3, 'active', '2025-07-07 07:37:21'),
 (6, 'apotek1', 'hashed_apoteker_pw', 'Apoteker Andi', 4, 'active', '2025-07-07 07:37:21'),
 (7, 'kasir1', 'hashed_kasir_pw', 'Kasir Rina', 5, 'active', '2025-07-07 07:37:21'),
-(8, 'daftar1', 'hashed_pendaftaran_pw', 'Pendaftaran Wati', 6, 'active', '2025-07-07 07:37:21');
+(8, 'daftar1', 'hashed_pendaftaran_pw', 'Pendaftaran Wati', 6, 'active', '2025-07-07 07:37:21'),
+(9, 'drjatmiko', 'hashed_dokter_pw', 'Dr. Jatmiko', 2, 'active', '2025-07-07 07:37:21');
 
 -- --------------------------------------------------------
 
@@ -457,13 +463,13 @@ ALTER TABLE `appointments`
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `department_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `department_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `doctors`
 --
 ALTER TABLE `doctors`
-  MODIFY `doctor_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `doctor_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `examinations`
@@ -523,7 +529,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user_access_logs`
