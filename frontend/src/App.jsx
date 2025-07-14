@@ -12,6 +12,7 @@ import PemeriksaanPage from "./pages/PemeriksaanPage";
 import PembayaranPage from "./pages/PembayaranPage";
 import PengambilanObatPage from "./pages/PengambilanObatPage";
 import ManajemenUserPage from "./pages/ManajemenUserPage";
+import ManajemenRoles from "./pages/ManajemenRoles";
 import LoginPage from "./pages/LoginPage";
 
 // Komponen PrivateRoute
@@ -121,6 +122,14 @@ export default function App() {
               element={
                 <PrivateRoute>
                   <ManajemenUserPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/manajemen-roles"
+              element={
+                <PrivateRoute>
+                  <ManajemenRoles />
                 </PrivateRoute>
               }
             />

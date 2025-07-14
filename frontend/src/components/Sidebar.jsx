@@ -23,7 +23,8 @@ const Sidebar = () => {
     { label: "Pemeriksaan", path: "/pemeriksaan", icon: <FaStethoscope /> },
     { label: "Pembayaran", path: "/pembayaran", icon: <FaMoneyBill /> },
     { label: "Pengambilan Obat", path: "/pengambilan-obat", icon: <FaPills /> },
-    { label: "Manajemen User", path: "/manajemen-user", icon: <FaUsersGear /> }
+    { label: "Manajemen User", path: "/manajemen-user", icon: <FaUsersGear /> },
+    { label: "Manajemen Roles", path: "/manajemen-roles", icon: <FaUsersGear /> }
   ];
 
   return (
