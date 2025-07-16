@@ -32,10 +32,15 @@ const DashboardPage = () => {
   const navigate = useNavigate();
 
   // Fungsi logout
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    navigate("/login");
-  };
+const handleLogout = () => {
+  // Hapus semua data autentikasi
+  localStorage.removeItem("token");
+  localStorage.removeItem("username");
+
+  // Redirect ke halaman login
+  navigate("/");
+};
+
 
   const summaryData = [
     { title: "Pasien Hari Ini", count: 120, icon: <FaUserInjured size={30} /> },

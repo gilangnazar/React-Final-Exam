@@ -1,7 +1,10 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+
 import Sidebar from "./components/Sidebar";
+import PrivateRoute from "./components/PrivateRoute";
+
 import DashboardPage from "./pages/DashboardPage";
 import PendaftaranPage from "./pages/PendaftaranPage";
 import Doctors from "./pages/Doctors";
@@ -15,129 +18,159 @@ import ManajemenUserPage from "./pages/ManajemenUserPage";
 import ManajemenRoles from "./pages/ManajemenRoles";
 import LoginPage from "./pages/LoginPage";
 
-// Komponen PrivateRoute
-function PrivateRoute({ children }) {
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  return isLoggedIn ? children : <Navigate to="/login" replace />;
-}
+const Layout = ({ children }) => (
+  <Container fluid>
+    <Row className="vh-100">
+      <Col md={2} className="p-0 bg-dark">
+        <Sidebar />
+      </Col>
+      <Col md={10} className="p-4">
+        {children}
+      </Col>
+    </Row>
+  </Container>
+);
 
 export default function App() {
-  const location = useLocation();
-
-  // Jika path sekarang "/login", tampilkan login page TANPA sidebar
-  if (location.pathname === "/login") {
-    return (
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        {/* Redirect semua path lain ke login */}
-        <Route path="*" element={<Navigate to="/login" />} />
-      </Routes>
-    );
-  }
-
-  // Layout dengan sidebar dan semua halaman yang diproteksi
   return (
-    <Container fluid>
-      <Row className="vh-100">
-        <Col md={2} className="p-0 bg-dark">
-          <Sidebar />
-        </Col>
-        <Col md={10} className="p-4">
-          <Routes>
-            {/* Bungkus semua rute di PrivateRoute */}
-            <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <DashboardPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/pendaftaran"
-              element={
-                <PrivateRoute>
-                  <PendaftaranPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/doctors"
-              element={
-                <PrivateRoute>
-                  <Doctors />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/Departments"
-              element={
-                <PrivateRoute>
-                  <Departments />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/kedatangan"
-              element={
-                <PrivateRoute>
-                  <KedatanganPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/antrian"
-              element={
-                <PrivateRoute>
-                  <AntrianPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/pemeriksaan"
-              element={
-                <PrivateRoute>
-                  <PemeriksaanPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/pembayaran"
-              element={
-                <PrivateRoute>
-                  <PembayaranPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/pengambilan-obat"
-              element={
-                <PrivateRoute>
-                  <PengambilanObatPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/manajemen-user"
-              element={
-                <PrivateRoute>
-                  <ManajemenUserPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/manajemen-roles"
-              element={
-                <PrivateRoute>
-                  <ManajemenRoles />
-                </PrivateRoute>
-              }
-            />
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </Col>
-      </Row>
-    </Container>
+    <Routes>
+      {/* Login */}
+      <Route path="/" element={<LoginPage />} />
+
+      {/* Dashboard */}
+      <Route
+        path="/dashboard"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <DashboardPage />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Pendaftaran */}
+      <Route
+        path="/pendaftaran"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <PendaftaranPage />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Doctors */}
+      <Route
+        path="/doctors"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <Doctors />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Departments */}
+      <Route
+        path="/departments"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <Departments />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Kedatangan */}
+      <Route
+        path="/kedatangan"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <KedatanganPage />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Antrian */}
+      <Route
+        path="/antrian"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <AntrianPage />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Pemeriksaan */}
+      <Route
+        path="/pemeriksaan"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <PemeriksaanPage />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Pembayaran */}
+      <Route
+        path="/pembayaran"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <PembayaranPage />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Pengambilan Obat */}
+      <Route
+        path="/pengambilan-obat"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <PengambilanObatPage />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Manajemen User */}
+      <Route
+        path="/manajemen-user"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <ManajemenUserPage />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Manajemen Roles */}
+      <Route
+        path="/manajemen-roles"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <ManajemenRoles />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 }

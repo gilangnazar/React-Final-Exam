@@ -116,7 +116,7 @@ const ManajemenUserPage = () => {
                 <td>{u.user_id}</td>
                 <td>{u.username}</td>
                 <td>{u.full_name}</td>
-                <td>{u.role_id}</td>
+                <td>{u.role_name}</td>
                 <td>
                   <Button
                     size="sm"
