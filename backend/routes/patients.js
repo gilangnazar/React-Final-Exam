@@ -1,9 +1,12 @@
 const express = require('express');
-const db = require('../db');
 const bcrypt = require('bcrypt');
+
+const db = require('../db');
+const { getPatientId } = require('../utils/userRoles');
 
 const router = express.Router();
 
+/* REGISTER DAN PROFILE PASIEN */
 router.post('/patients/register', async (req, res) => {
   try {
     const { username, password, full_name } = req.body;
@@ -88,7 +91,9 @@ router.get('/patients/daftaronline/:patient_id', async (req, res) => {
     });
   }
 });
+/* REGISTER DAN PROFILE PASIEN END */
 
+/* PASIEN DAFTARONLINE */
 router.post('/patients/daftaronline', async (req, res) => {
   try {
     const { patient_id, schedule_date, department_id, doctor_id } = req.body;
@@ -109,4 +114,21 @@ router.post('/patients/daftaronline', async (req, res) => {
   }
 });
 
+router.get('/patients/daftaronline', async (req, res) => {
+  try {
+    const { user_id } = req.body;
+
+    if (!user_id) return res.status(400).json({ msg: 'User Id invalid, try to login first' });
+
+    const patient_id = await getPatientId(user_id);
+
+    const [rows] = await db.execute('SELECT * FROM appointments WHERE patient_id = ?', [patient_id]);
+
+    return res.status(200).json({ msg: 'Data daftar online pasien', data: rows });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Server error', err: error.message });
+  }
+});
+
+/* PASIEN DAFTARONLINE END*/
 module.exports = router;
