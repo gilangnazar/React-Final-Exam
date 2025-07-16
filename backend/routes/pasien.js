@@ -2,12 +2,17 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 
 const db = require('../db');
-const { getPatientId } = require('../utils/userRoles');
+const appointmentsController = require('../controllers/appointmentsController');
 
 const router = express.Router();
 
+/* PASIEN DAFTARONLINE */
+router.post('/pasien/:user_id/appointments', appointmentsController.createAppointment);
+router.get('/pasien/:user_id/appointments', appointmentsController.fetchAppointment);
+/* PASIEN DAFTARONLINE END*/
+
 /* REGISTER DAN PROFILE PASIEN */
-router.post('/patients/register', async (req, res) => {
+router.post('/pasien/register', async (req, res) => {
   try {
     const { username, password, full_name } = req.body;
 
@@ -29,7 +34,7 @@ router.post('/patients/register', async (req, res) => {
   }
 });
 
-router.post('/patients/:user_id/profile', async (req, res) => {
+router.post('/pasien/:user_id/profile', async (req, res) => {
   try {
     const { nik, gender, birth_date, phone, address } = req.body;
     const { user_id } = req.params;
@@ -50,7 +55,7 @@ router.post('/patients/:user_id/profile', async (req, res) => {
   }
 });
 
-router.put('/patients/:user_id/profile', async (req, res) => {
+router.put('/pasien/:user_id/profile', async (req, res) => {
   try {
     const { nik, gender, birth_date, phone, address } = req.body;
     const { user_id } = req.params;
@@ -70,65 +75,6 @@ router.put('/patients/:user_id/profile', async (req, res) => {
     return res.status(500).json({ msg: 'Server error', err: error });
   }
 });
-
-router.get('/patients/daftaronline/:patient_id', async (req, res) => {
-  try {
-    const { patient_id } = req.params;
-
-    const [data] = await db.execute(
-      'SELECT * FROM appointments WHERE patient_id = ? ORDER BY department_id DESC',
-      [patient_id]
-    );
-
-    res.status(200).json({
-      msg: `Data berhasil diambil, pasien: ${patient_id}`,
-      data: data,
-    });
-  } catch (error) {
-    res.status(500).json({
-      msg: 'Server error',
-      err: error,
-    });
-  }
-});
 /* REGISTER DAN PROFILE PASIEN END */
 
-/* PASIEN DAFTARONLINE */
-router.post('/patients/daftaronline', async (req, res) => {
-  try {
-    const { patient_id, schedule_date, department_id, doctor_id } = req.body;
-
-    if (!patient_id || !schedule_date || !department_id || !doctor_id)
-      return res.status(400).json({ msg: 'Incomplete data' });
-
-    const status = 'waiting';
-
-    await db.execute(
-      'INSERT INTO appointments(patient_id, schedule_date, department_id, doctor_id, status) VALUES(?,?,?,?,?)',
-      [patient_id, schedule_date, department_id, doctor_id, status]
-    );
-
-    return res.status(201).json({ msg: 'Berhasil melakukan daftar online' });
-  } catch (error) {
-    return res.status(500).json({ msg: 'Server error', err: error });
-  }
-});
-
-router.get('/patients/daftaronline', async (req, res) => {
-  try {
-    const { user_id } = req.body;
-
-    if (!user_id) return res.status(400).json({ msg: 'User Id invalid, try to login first' });
-
-    const patient_id = await getPatientId(user_id);
-
-    const [rows] = await db.execute('SELECT * FROM appointments WHERE patient_id = ?', [patient_id]);
-
-    return res.status(200).json({ msg: 'Data daftar online pasien', data: rows });
-  } catch (error) {
-    return res.status(500).json({ msg: 'Server error', err: error.message });
-  }
-});
-
-/* PASIEN DAFTARONLINE END*/
 module.exports = router;
