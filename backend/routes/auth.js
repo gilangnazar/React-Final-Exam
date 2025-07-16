@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
         full_name: user.full_name,
       },
       process.env.JWT_SECRET,
-      { expiresIn: '15m' }
+      { expiresIn: '30s' }
     );
     res.json({ token });
   } catch (error) {
