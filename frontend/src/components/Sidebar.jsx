@@ -14,16 +14,17 @@ import { GiArchiveRegister } from "react-icons/gi";
 
 const Sidebar = () => {
   const menu = [
-    { label: "Dashboard", path: "/", icon: <FaChartLine /> },
+    { label: "Dashboard", path: "/dashboard", icon: <FaChartLine /> },
     { label: "Pendaftaran", path: "/pendaftaran", icon: <GiArchiveRegister /> },
     { label: "Kedatangan", path: "/kedatangan", icon: <FaUserCheck /> },
-    { label: "Doctors", path: "/Doctors", icon: <FaUserDoctor /> },
-    { label: "Departments", path: "/Departments", icon: <BsBuildingsFill /> },
+    { label: "Doctors", path: "/doctors", icon: <FaUserDoctor /> },
+    { label: "Departments", path: "/departments", icon: <BsBuildingsFill /> },
     { label: "Antrian", path: "/antrian", icon: <FaListOl /> },
     { label: "Pemeriksaan", path: "/pemeriksaan", icon: <FaStethoscope /> },
     { label: "Pembayaran", path: "/pembayaran", icon: <FaMoneyBill /> },
     { label: "Pengambilan Obat", path: "/pengambilan-obat", icon: <FaPills /> },
-    { label: "Manajemen User", path: "/manajemen-user", icon: <FaUsersGear /> }
+    { label: "Manajemen User", path: "/manajemen-user", icon: <FaUsersGear /> },
+    { label: "Manajemen Roles", path: "/manajemen-roles", icon: <FaUsersGear /> }
   ];
 
   return (

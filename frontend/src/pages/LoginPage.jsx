@@ -1,29 +1,40 @@
 // src/pages/LoginPage.jsx
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import axios from "axios";
 import { Card, Form, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // untuk pesan error
+  // const [username, setUsername] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [error, setError] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = useCallback(async (e) => {
     e.preventDefault();
+    const username = e.target.username.value;
+    const password = e.target.password.value;
 
-    if (!username || !password) {
-      setError("Semua field harus diisi.");
-      return;
+    try {
+      const response = await axios.post("http://localhost:4000/api/login", {
+        username,
+        password,
+      });
+
+      // Pastikan backend membalas token
+      const { token } = response.data;
+      localStorage.setItem("token", token);
+
+      navigate("/dashboard");
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        alert("Invalid username or password.");
+      } else {
+        alert("Login failed. Please try again.");
+      }
+      console.error(error);
     }
-
-    // Jika sudah diisi semua, hapus error
-    setError("");
-
-    // Simpan status login dummy
-    localStorage.setItem("isLoggedIn", "true");
-    navigate("/");
-  };
+  }, []);
 
   return (
     <div
@@ -66,19 +77,14 @@ export default function LoginPage() {
           <p className="text-center mb-4">Enter your Username and Password</p>
 
           {/* ALERT */}
-          {error && (
-            <Alert variant="danger" onClose={() => setError("")}>
-              {error}
-            </Alert>
-          )}
+          
 
           <Form onSubmit={handleLogin}>
             <Form.Group className="mb-3">
               <Form.Control
                 type="text"
                 placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                name="username"
                 style={{
                   borderRadius: "50px",
                   border: "1px solid #0d6efd",
@@ -90,8 +96,7 @@ export default function LoginPage() {
               <Form.Control
                 type="password"
                 placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                name="password"
                 style={{
                   borderRadius: "50px",
                   border: "1px solid #0d6efd",
@@ -115,7 +120,7 @@ export default function LoginPage() {
 
           <div className="text-center mt-3" style={{ fontSize: "0.9rem" }}>
             Belum punya akun? <a href="#">Sign Up</a>
-          </div>
+          </div>  
         </div>
       </div>
     </div>

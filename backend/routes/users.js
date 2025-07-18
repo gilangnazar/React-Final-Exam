@@ -5,7 +5,13 @@ const router = express.Router();
 
 router.get('/users', async (req, res) => {
   try {
-    const [data] = await db.execute('SELECT * FROM users WHERE deleted_at IS NULL ORDER BY user_id DESC');
+    const [data] = await db.execute(`
+      SELECT 
+      u.user_id, u.username, u.full_name, u.role_id, r.role_name, u.status, u.created_at, u.deleted_at
+      FROM users u 
+      INNER JOIN roles r ON u.role_id = r.role_id
+      WHERE u.deleted_at IS NULL ORDER BY user_id DESC
+      `);
 
     res.status(200).json({
       msg: 'Data berhasil diambil',

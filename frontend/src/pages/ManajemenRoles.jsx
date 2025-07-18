@@ -4,34 +4,31 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ManajemenUserPage = () => {
-  const [users, setUsers] = useState([]);
+const ManajemenRoles = () => {
+  const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    user_id: null,
-    username: "",
-    password_hash: "",
-    full_name: "",
-    role_id: "",
+    role_id: null,
+    role_name: "",
   });
   const [isEdit, setIsEdit] = useState(false);
 
-  const apiUrl = "http://localhost:4000/api/users"; // ganti sesuai backend-mu
+  const apiUrl = "http://localhost:4000/api/roles"; // Ganti sesuai backend
 
-  const fetchUsers = async () => {
+  const fetchRoles = async () => {
     setLoading(true);
     try {
       const res = await axios.get(apiUrl);
-      setUsers(res.data.data);
+      setRoles(res.data.data);
     } catch (err) {
-      toast.error("Gagal mengambil data users");
+      toast.error("Gagal mengambil data roles");
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchRoles();
   }, []);
 
   const handleInputChange = (e) => {
@@ -42,60 +39,48 @@ const ManajemenUserPage = () => {
     e.preventDefault();
     try {
       if (isEdit) {
-        await axios.put(`${apiUrl}/${formData.user_id}`, formData);
-        toast.success("User berhasil diperbarui.");
+        await axios.put(`${apiUrl}/${formData.role_id}`, formData);
+        toast.success("Role berhasil diperbarui.");
       } else {
         await axios.post(apiUrl, formData);
-        toast.success("User berhasil ditambahkan.");
+        toast.success("Role berhasil ditambahkan.");
       }
       setShowModal(false);
-      setFormData({
-        user_id: null,
-        username: "",
-        password_hash: "",
-        full_name: "",
-        role_id: "",
-      });
-      fetchUsers();
+      setFormData({ role_id: null, role_name: "" });
+      fetchRoles();
     } catch (err) {
       toast.error("Gagal menyimpan data");
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Yakin ingin hapus user ini?")) return;
+    if (!window.confirm("Yakin ingin hapus role ini?")) return;
     try {
       await axios.delete(`${apiUrl}/${id}`);
-      toast.success("User berhasil dihapus.");
-      fetchUsers();
+      toast.success("Role berhasil dihapus.");
+      fetchRoles();
     } catch (err) {
       toast.error("Gagal menghapus data");
     }
   };
 
-  const handleEdit = (user) => {
-    setFormData(user);
+  const handleEdit = (role) => {
+    setFormData(role);
     setIsEdit(true);
     setShowModal(true);
   };
 
   const handleAddNew = () => {
-    setFormData({
-      user_id: null,
-      username: "",
-      password_hash: "",
-      full_name: "",
-      role_id: "",
-    });
+    setFormData({ role_id: null, role_name: "" });
     setIsEdit(false);
     setShowModal(true);
   };
 
   return (
     <div className="container mt-4">
-      <h3>Manajemen User</h3>
+      <h3>Manajemen Roles</h3>
       <Button variant="primary" className="mb-3" onClick={handleAddNew}>
-        Tambah User
+        Tambah Role
       </Button>
       {loading ? (
         <Spinner animation="border" />
@@ -104,24 +89,20 @@ const ManajemenUserPage = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Username</th>
-              <th>Full Name</th>
-              <th>Role</th>
+              <th>Nama Role</th>
               <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((u) => (
-              <tr key={u.user_id}>
-                <td>{u.user_id}</td>
-                <td>{u.username}</td>
-                <td>{u.full_name}</td>
-                <td>{u.role_name}</td>
+            {roles.map((r) => (
+              <tr key={r.role_id}>
+                <td>{r.role_id}</td>
+                <td>{r.role_name}</td>
                 <td>
                   <Button
                     size="sm"
                     variant="warning"
-                    onClick={() => handleEdit(u)}
+                    onClick={() => handleEdit(r)}
                     className="me-2"
                   >
                     Edit
@@ -129,7 +110,7 @@ const ManajemenUserPage = () => {
                   <Button
                     size="sm"
                     variant="danger"
-                    onClick={() => handleDelete(u.user_id)}
+                    onClick={() => handleDelete(r.role_id)}
                   >
                     Hapus
                   </Button>
@@ -142,48 +123,21 @@ const ManajemenUserPage = () => {
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{isEdit ? "Edit User" : "Tambah User"}</Modal.Title>
+          <Modal.Title>{isEdit ? "Edit Role" : "Tambah Role"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-2">
-              <Form.Label>Username</Form.Label>
+              <Form.Label>Nama Role</Form.Label>
               <Form.Control
-                name="username"
-                value={formData.username}
-                onChange={handleInputChange}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                name="password_hash"
-                value={formData.password_hash}
-                onChange={handleInputChange}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Full Name</Form.Label>
-              <Form.Control
-                name="full_name"
-                value={formData.full_name}
-                onChange={handleInputChange}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Role ID</Form.Label>
-              <Form.Control
-                name="role_id"
-                value={formData.role_id}
+                name="role_name"
+                value={formData.role_name}
                 onChange={handleInputChange}
                 required
               />
             </Form.Group>
             <Button type="submit" variant="primary">
-              {isEdit ? "Simpan Perubahan" : "Tambah User"}
+              {isEdit ? "Simpan Perubahan" : "Tambah Role"}
             </Button>
           </Form>
         </Modal.Body>
@@ -194,4 +148,4 @@ const ManajemenUserPage = () => {
   );
 };
 
-export default ManajemenUserPage;
+export default ManajemenRoles;
