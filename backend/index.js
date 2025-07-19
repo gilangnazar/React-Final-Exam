@@ -3,7 +3,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const departments = require('./routes/departments');
-const doctors = require('./routes/doctors');
 const medicines = require('./routes/medicines');
 const users = require('./routes/users');
 const roles = require('./routes/roles');
@@ -11,6 +10,7 @@ const auth = require('./routes/auth');
 
 const pasien = require('./routes/pasien');
 const pendaftaran = require('./routes/pendaftaran');
+const doctors = require('./routes/doctors');
 
 require('dotenv').config();
 
@@ -27,7 +27,6 @@ app.use(
 app.use(bodyParser.json());
 
 app.use('/api', departments);
-app.use('/api', doctors);
 app.use('/api', medicines);
 app.use('/api', users);
 app.use('/api', roles);
@@ -35,6 +34,7 @@ app.use('/api', auth);
 
 app.use('/api', pasien);
 app.use('/api', pendaftaran);
+app.use('/api', doctors);
 
 app.listen(PORT, () => {
   console.log(`app run in port: ${PORT}`);

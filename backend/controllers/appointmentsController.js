@@ -1,5 +1,5 @@
 const db = require('../db');
-const { getPatientId } = require('../utils/userRoles');
+const { getPatientId, getDoctorId } = require('../utils/userRoles');
 
 // ROLE: PASIEN
 exports.createAppointment = async (req, res) => {
@@ -82,5 +82,33 @@ exports.pendaftaranConfirmedAppointments = async (req, res) => {
     return res.status(200).json({ msg: 'Berhasil ubah status Appointment, dan membuat nomor antrian baru' });
   } catch (error) {
     return res.status(500).json({ msg: 'Server error', err: error.message });
+  }
+};
+
+// ROLE: DOCTOR
+exports.doctorFetchAppointments = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+
+    const doctor_id = await getDoctorId(user_id);
+
+    const queryFetchDoctorAppointments = `SELECT 
+  a.appointment_id,
+  a.doctor_id,
+  a.status,
+  p.patient_id,
+  u.full_name AS patient_name,
+  d.name AS department_name
+FROM appointments a
+JOIN patients p ON a.patient_id = p.patient_id
+JOIN departments d ON a.department_id = d.department_id
+JOIN users u ON p.user_id = u.user_id
+WHERE a.doctor_id = ? AND schedule_date = CURDATE()`;
+
+    const [data] = await db.execute(queryFetchDoctorAppointments, [doctor_id]);
+
+    res.status(200).json({ msg: 'Data Appointments fetched successfully', data: data });
+  } catch (error) {
+    res.status(500).json({ msg: 'Server Error', err: error });
   }
 };
