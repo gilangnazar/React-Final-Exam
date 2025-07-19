@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 12, 2025 at 12:40 PM
+-- Generation Time: Jul 19, 2025 at 07:52 PM
 -- Server version: 8.0.30
 -- PHP Version: 7.4.13
 
@@ -34,17 +34,21 @@ CREATE TABLE `appointments` (
   `department_id` int DEFAULT NULL,
   `doctor_id` int DEFAULT NULL,
   `status` enum('waiting','confirmed','cancelled','completed') DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `appointments`
 --
 
-INSERT INTO `appointments` (`appointment_id`, `patient_id`, `schedule_date`, `department_id`, `doctor_id`, `status`, `created_at`) VALUES
-(1, 1, '2025-07-08', 1, 1, 'waiting', '2025-07-07 07:37:21'),
-(2, 2, '2025-07-09', 3, 2, 'confirmed', '2025-07-07 07:37:21'),
-(3, 3, '2025-07-08', 1, 1, 'waiting', '2025-07-12 12:26:08');
+INSERT INTO `appointments` (`appointment_id`, `patient_id`, `schedule_date`, `department_id`, `doctor_id`, `status`, `created_at`, `deleted_at`) VALUES
+(1, 1, '2025-07-08', 1, 1, 'cancelled', '2025-07-07 07:37:21', NULL),
+(2, 2, '2025-07-09', 3, 2, 'confirmed', '2025-07-07 07:37:21', NULL),
+(3, 3, '2025-07-08', 1, 1, 'cancelled', '2025-07-12 12:26:08', NULL),
+(4, 3, '2025-07-16', 1, 1, 'cancelled', '2025-07-16 11:53:04', NULL),
+(5, 1, '2025-07-16', 1, 1, 'confirmed', '2025-07-16 12:08:57', NULL),
+(6, 1, '2025-07-20', 1, 1, 'confirmed', '2025-07-20 16:36:24', NULL);
 
 -- --------------------------------------------------------
 
@@ -105,15 +109,17 @@ CREATE TABLE `examinations` (
   `complaint` text,
   `diagnosis` text,
   `notes` text,
-  `exam_date` datetime DEFAULT NULL
+  `exam_date` datetime DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `examinations`
 --
 
-INSERT INTO `examinations` (`exam_id`, `appointment_id`, `doctor_id`, `complaint`, `diagnosis`, `notes`, `exam_date`) VALUES
-(1, 2, 2, 'Demam dan batuk', 'Infeksi ringan', 'Minum obat 3x sehari', '2025-07-09 09:15:00');
+INSERT INTO `examinations` (`exam_id`, `appointment_id`, `doctor_id`, `complaint`, `diagnosis`, `notes`, `exam_date`, `deleted_at`) VALUES
+(1, 2, 2, 'Demam dan batuk', 'Infeksi ringan', 'Minum obat 3x sehari', '2025-07-09 09:15:00', NULL),
+(2, 6, 1, 'Pusing', 'Kurang Darah', 'Minum Tablet Penambah Darah', '2025-07-20 02:28:04', NULL);
 
 -- --------------------------------------------------------
 
@@ -149,15 +155,16 @@ CREATE TABLE `medicine_pickups` (
   `pickup_id` int NOT NULL,
   `prescription_id` int DEFAULT NULL,
   `pickup_date` datetime DEFAULT NULL,
-  `picked_by` int DEFAULT NULL
+  `picked_by` int DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `medicine_pickups`
 --
 
-INSERT INTO `medicine_pickups` (`pickup_id`, `prescription_id`, `pickup_date`, `picked_by`) VALUES
-(1, 1, '2025-07-09 10:00:00', 6);
+INSERT INTO `medicine_pickups` (`pickup_id`, `prescription_id`, `pickup_date`, `picked_by`, `deleted_at`) VALUES
+(1, 1, '2025-07-09 10:00:00', 6, NULL);
 
 -- --------------------------------------------------------
 
@@ -172,17 +179,19 @@ CREATE TABLE `patients` (
   `gender` enum('L','P') DEFAULT NULL,
   `birth_date` date DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
-  `address` text
+  `address` text,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `patients`
 --
 
-INSERT INTO `patients` (`patient_id`, `user_id`, `nik`, `gender`, `birth_date`, `phone`, `address`) VALUES
-(1, 4, '3201012345670001', 'L', '1990-05-10', '081234567890', 'Jl. Merdeka No.1'),
-(2, 5, '3201012345670002', 'P', '1995-08-20', '082345678901', 'Jl. Sudirman No.2'),
-(3, 11, '32123456', 'L', '2001-05-05', '0895', 'Bogor');
+INSERT INTO `patients` (`patient_id`, `user_id`, `nik`, `gender`, `birth_date`, `phone`, `address`, `deleted_at`) VALUES
+(1, 4, '3201012345670001', 'L', '1990-05-10', '081234567890', 'Jl. Merdeka No.1', NULL),
+(2, 5, '3201012345670002', 'P', '1995-08-20', '082345678901', 'Jl. Sudirman No.2', NULL),
+(3, 11, '32123456', 'L', '2001-05-05', '0895', 'Bogor', NULL),
+(4, 16, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -196,15 +205,16 @@ CREATE TABLE `payments` (
   `total_amount` decimal(10,2) DEFAULT NULL,
   `payment_method` enum('cash','card','insurance') DEFAULT NULL,
   `payment_status` enum('unpaid','paid','pending') DEFAULT NULL,
-  `payment_date` datetime DEFAULT NULL
+  `payment_date` datetime DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `payments`
 --
 
-INSERT INTO `payments` (`payment_id`, `appointment_id`, `total_amount`, `payment_method`, `payment_status`, `payment_date`) VALUES
-(1, 2, 35000.00, 'cash', 'paid', '2025-07-09 09:30:00');
+INSERT INTO `payments` (`payment_id`, `appointment_id`, `total_amount`, `payment_method`, `payment_status`, `payment_date`, `deleted_at`) VALUES
+(1, 2, 35000.00, 'cash', 'paid', '2025-07-09 09:30:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -215,15 +225,18 @@ INSERT INTO `payments` (`payment_id`, `appointment_id`, `total_amount`, `payment
 CREATE TABLE `prescriptions` (
   `prescription_id` int NOT NULL,
   `exam_id` int DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `prescriptions`
 --
 
-INSERT INTO `prescriptions` (`prescription_id`, `exam_id`, `created_at`) VALUES
-(1, 1, '2025-07-07 07:37:21');
+INSERT INTO `prescriptions` (`prescription_id`, `exam_id`, `created_at`, `deleted_at`) VALUES
+(1, 1, '2025-07-07 07:37:21', NULL),
+(2, 2, '2025-07-19 19:47:04', NULL),
+(3, 2, '2025-07-19 19:48:34', NULL);
 
 -- --------------------------------------------------------
 
@@ -237,16 +250,19 @@ CREATE TABLE `prescription_items` (
   `medicine_id` int DEFAULT NULL,
   `dosage` varchar(100) DEFAULT NULL,
   `quantity` int DEFAULT NULL,
-  `instructions` text
+  `instructions` text,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `prescription_items`
 --
 
-INSERT INTO `prescription_items` (`item_id`, `prescription_id`, `medicine_id`, `dosage`, `quantity`, `instructions`) VALUES
-(1, 1, 1, '500mg', 10, '3x sehari setelah makan'),
-(2, 1, 3, '100mg', 5, '2x sehari pagi dan malam');
+INSERT INTO `prescription_items` (`item_id`, `prescription_id`, `medicine_id`, `dosage`, `quantity`, `instructions`, `deleted_at`) VALUES
+(1, 1, 1, '500mg', 10, '3x sehari setelah makan', NULL),
+(2, 1, 3, '100mg', 5, '2x sehari pagi dan malam', NULL),
+(3, 3, 1, '3x1', 10, 'Setelah makan', NULL),
+(4, 3, 3, '2x1', 5, 'Sebelum tidur', NULL);
 
 -- --------------------------------------------------------
 
@@ -258,17 +274,21 @@ CREATE TABLE `queues` (
   `queue_id` int NOT NULL,
   `appointment_id` int DEFAULT NULL,
   `queue_number` int DEFAULT NULL,
-  `status` enum('waiting','called','done') DEFAULT NULL,
-  `call_time` datetime DEFAULT NULL
+  `status` enum('waiting','called','done','calling') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `call_time` datetime DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` timestamp NULL DEFAULT NULL
 );
 
 --
 -- Dumping data for table `queues`
 --
 
-INSERT INTO `queues` (`queue_id`, `appointment_id`, `queue_number`, `status`, `call_time`) VALUES
-(1, 1, 1, 'waiting', NULL),
-(2, 2, 2, 'called', '2025-07-09 09:00:00');
+INSERT INTO `queues` (`queue_id`, `appointment_id`, `queue_number`, `status`, `call_time`, `created_at`, `deleted_at`) VALUES
+(1, 1, 1, 'done', NULL, '2025-07-18 08:56:50', NULL),
+(2, 2, 2, 'done', NULL, '2025-07-18 08:56:50', NULL),
+(6, 5, 1, 'done', NULL, '2025-07-18 15:38:54', NULL),
+(8, 6, 1, 'calling', NULL, '2025-07-19 16:53:17', NULL);
 
 -- --------------------------------------------------------
 
@@ -327,7 +347,8 @@ INSERT INTO `users` (`user_id`, `username`, `password_hash`, `full_name`, `role_
 (8, 'daftar1', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'Pendaftaran Wati', 6, 'active', '2025-07-07 07:37:21', NULL),
 (9, 'drjatmiko', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'Dr. Jatmiko', 2, 'active', '2025-07-07 07:37:21', NULL),
 (10, 'daftargilangnz', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'gilangnazar', 6, 'active', '2025-07-12 09:28:08', NULL),
-(11, 'pasien7', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'hansolo', 3, 'active', '2025-07-12 11:25:10', NULL);
+(11, 'pasien7', '$2b$10$k4n3FQxX66WHZ1L1cx3UwecE2VFSMFjsa16nnQxoqGACPz8RyJ4ey', 'hansolo', 3, 'active', '2025-07-12 11:25:10', NULL),
+(16, 'gilangnazar', '$2b$10$jCSxXcF1iD7w1l6mEdJIAuzJss1iiWyX1D6tUBHlHhgVMTqAx/7nq', 'Gilang Nazar Pasien', 3, 'active', '2025-07-19 16:32:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -447,7 +468,8 @@ ALTER TABLE `roles`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD UNIQUE KEY `username` (`username`),
+  ADD KEY `role_id` (`role_id`);
 
 --
 -- Indexes for table `user_access_logs`
@@ -464,7 +486,7 @@ ALTER TABLE `user_access_logs`
 -- AUTO_INCREMENT for table `appointments`
 --
 ALTER TABLE `appointments`
-  MODIFY `appointment_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `appointment_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -482,7 +504,7 @@ ALTER TABLE `doctors`
 -- AUTO_INCREMENT for table `examinations`
 --
 ALTER TABLE `examinations`
-  MODIFY `exam_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `exam_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `medicines`
@@ -500,7 +522,7 @@ ALTER TABLE `medicine_pickups`
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
-  MODIFY `patient_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `patient_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -512,19 +534,19 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `prescriptions`
 --
 ALTER TABLE `prescriptions`
-  MODIFY `prescription_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `prescription_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `prescription_items`
 --
 ALTER TABLE `prescription_items`
-  MODIFY `item_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `item_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `queues`
 --
 ALTER TABLE `queues`
-  MODIFY `queue_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `queue_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -536,7 +558,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `user_access_logs`
@@ -607,6 +629,12 @@ ALTER TABLE `prescription_items`
 --
 ALTER TABLE `queues`
   ADD CONSTRAINT `queues_ibfk_1` FOREIGN KEY (`appointment_id`) REFERENCES `appointments` (`appointment_id`);
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `user_access_logs`
