@@ -64,9 +64,13 @@ exports.pendaftaranConfirmedAppointments = async (req, res) => {
     const { appointment_id } = req.params;
     if (!appointment_id) return res.status(400).json({ msg: 'Invalid ID' });
 
-    const query = `UPDATE appointments SET status = 'confirmed' WHERE appointment_id = ?`;
+    const queryConfirmedAppointment = `UPDATE appointments SET status = 'confirmed' WHERE appointment_id = ?`;
+    await db.execute(queryConfirmedAppointment, [appointment_id]);
 
-    const [rows] = await db.execute(query, [appointment_id]);
+    
+    
+    const queryCraeteQueue = `INSERT INTO queues(appointment_id, queue_number, status) VALUES(?, )`;
+    await db.execute(queryCraeteQueue);
 
     return res.status(200).json({ msg: 'Berhasil ubah status Appointment' });
   } catch (error) {
