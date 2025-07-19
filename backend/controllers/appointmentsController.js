@@ -1,6 +1,7 @@
 const db = require('../db');
 const { getPatientId } = require('../utils/userRoles');
 
+// ROLE: PASIEN
 exports.createAppointment = async (req, res) => {
   try {
     const { user_id } = req.params;
@@ -59,6 +60,7 @@ WHERE a.status = 'waiting' AND a.deleted_at IS null`;
   }
 };
 
+// ROLE: PENDAFTARAN
 exports.pendaftaranConfirmedAppointments = async (req, res) => {
   try {
     const { appointment_id } = req.params;
@@ -67,12 +69,15 @@ exports.pendaftaranConfirmedAppointments = async (req, res) => {
     const queryConfirmedAppointment = `UPDATE appointments SET status = 'confirmed' WHERE appointment_id = ?`;
     await db.execute(queryConfirmedAppointment, [appointment_id]);
 
-    
-    
-    const queryCraeteQueue = `INSERT INTO queues(appointment_id, queue_number, status) VALUES(?, )`;
-    await db.execute(queryCraeteQueue);
+    const queryFetchLastNumber = `SELECT MAX(queue_number) AS last_queue FROM queues WHERE DATE(created_at) = CURDATE()`;
+    const last_number = await db.execute(queryFetchLastNumber);
+    console.log('last number of q: ', last_number[0][0].last_queue);
 
-    return res.status(200).json({ msg: 'Berhasil ubah status Appointment' });
+    const queue_number = Number(last_number[0][0].last_queue ? last_number[0][0].last_queue : 0) + 1;
+    const queryCraeteQueue = `INSERT INTO queues(appointment_id, queue_number, status) VALUES(?, ?, 'waiting')`;
+    await db.execute(queryCraeteQueue, [appointment_id, queue_number]);
+
+    return res.status(200).json({ msg: 'Berhasil ubah status Appointment, dan membuat nomor antrian baru' });
   } catch (error) {
     return res.status(500).json({ msg: 'Server error', err: error.message });
   }
