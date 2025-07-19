@@ -1,5 +1,5 @@
 const db = require('../db');
-const { getPatientId, getDoctorId } = require('../utils/userRoles');
+const { getDoctorId } = require('../utils/userRoles');
 
 exports.createExamination = async (req, res) => {
   try {

@@ -2,11 +2,13 @@ const express = require('express');
 const db = require('../db');
 const appointmentsController = require('../controllers/appointmentsController');
 const examinationsController = require('../controllers/examinationsController');
+const prescriptionsController = require('../controllers/prescriptionsController');
 
 const router = express.Router();
 
 router.get('/doctors/:user_id/appointments', appointmentsController.doctorFetchAppointments);
 router.post('/doctors/:user_id/examinations', examinationsController.createExamination);
+router.post('/doctors/prescriptions', prescriptionsController.createPrescription);
 
 // router.get('/doctors', async (req, res) => {
 //   try {
