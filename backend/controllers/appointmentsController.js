@@ -43,6 +43,7 @@ exports.fetchAppointment = async (req, res) => {
   }
 };
 
+// ROLE: PENDAFTARAN
 exports.pendaftaranFetchAppointments = async (req, res) => {
   try {
     const query = `SELECT a.appointment_id, u.full_name, a.schedule_date, dep.name as department_name, a.status
@@ -60,7 +61,6 @@ WHERE a.status = 'waiting' AND a.deleted_at IS null`;
   }
 };
 
-// ROLE: PENDAFTARAN
 exports.pendaftaranConfirmedAppointments = async (req, res) => {
   try {
     const { appointment_id } = req.params;
@@ -74,8 +74,10 @@ exports.pendaftaranConfirmedAppointments = async (req, res) => {
     console.log('last number of q: ', last_number[0][0].last_queue);
 
     const queue_number = Number(last_number[0][0].last_queue ? last_number[0][0].last_queue : 0) + 1;
-    const queryCraeteQueue = `INSERT INTO queues(appointment_id, queue_number, status) VALUES(?, ?, 'waiting')`;
-    await db.execute(queryCraeteQueue, [appointment_id, queue_number]);
+    const status = queue_number === 1 ? 'calling' : 'waiting';
+
+    const queryCraeteQueue = `INSERT INTO queues(appointment_id, queue_number, status) VALUES(?, ?, ?)`;
+    await db.execute(queryCraeteQueue, [appointment_id, queue_number, status]);
 
     return res.status(200).json({ msg: 'Berhasil ubah status Appointment, dan membuat nomor antrian baru' });
   } catch (error) {
