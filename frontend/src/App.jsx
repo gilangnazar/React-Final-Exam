@@ -146,22 +146,22 @@ export default function App() {
       />
 
       {/* Manajemen User */}
-      <Route
-        path="/manajemen-user"
-        element={
-          <PrivateRoute>
-            <Layout>
-              <ManajemenUserPage />
-            </Layout>
-          </PrivateRoute>
-        }
-      />
+    <Route
+  path="/manajemen-user"
+  element={
+    <PrivateRoute allowedRoles={[1]}>
+      <Layout>
+        <ManajemenUserPage />
+      </Layout>
+    </PrivateRoute>
+  }
+/>
 
       {/* Manajemen Roles */}
       <Route
         path="/manajemen-roles"
         element={
-          <PrivateRoute>
+         <PrivateRoute allowedRoles={[1]}>
             <Layout>
               <ManajemenRoles />
             </Layout>
