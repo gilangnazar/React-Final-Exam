@@ -35,7 +35,15 @@ router.post('/login', async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
-    res.json({ token });
+    res.json({
+      token,
+      data: {
+        user_id: user.id,
+        username: user.username,
+        role_id: user.role_id,
+        full_name: user.full_name,
+      },
+    });
   } catch (error) {
     console.error('login error: ', error);
     return res.status(500).json({
