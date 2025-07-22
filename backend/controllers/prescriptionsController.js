@@ -53,6 +53,12 @@ exports.createPrescription = async (req, res) => {
       [appointment_id, totalTagihan, 'unpaid']
     );
 
+    await db.execute(
+      `INSERT INTO medicine_pickup (prescription_id)
+   VALUES (?)`,
+      [prescription_id]
+    );
+
     await connection.commit();
 
     res
