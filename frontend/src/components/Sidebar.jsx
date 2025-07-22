@@ -11,6 +11,7 @@ import {
 import { FaChartLine, FaUserCheck, FaUsersGear, FaUserDoctor } from "react-icons/fa6";
 import { BsBuildingsFill } from "react-icons/bs";
 import { GiArchiveRegister } from "react-icons/gi";
+import { TbCashRegister } from "react-icons/tb";
 
 const Sidebar = () => {
   const menu = [
@@ -24,7 +25,8 @@ const Sidebar = () => {
     { label: "Pembayaran", path: "/pembayaran", icon: <FaMoneyBill /> },
     { label: "Pengambilan Obat", path: "/pengambilan-obat", icon: <FaPills /> },
     { label: "Manajemen User", path: "/manajemen-user", icon: <FaUsersGear /> },
-    { label: "Manajemen Roles", path: "/manajemen-roles", icon: <FaUsersGear /> }
+    { label: "Manajemen Roles", path: "/manajemen-roles", icon: <FaUsersGear /> },
+    { label: "Pembayaran Pasien", path: "/Pembayaran-Pasien", icon: <TbCashRegister /> }
   ];
 
   return (

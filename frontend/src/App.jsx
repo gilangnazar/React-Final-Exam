@@ -1,8 +1,8 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Routes, Route, Navigate } from "react-router-dom";
-
-import Sidebar from "./components/Sidebar";
+import Layout from "./components/Layout";
+// import Sidebar from "./components/Sidebar";
 import PrivateRoute from "./components/PrivateRoute";
 
 import DashboardPage from "./pages/DashboardPage";
@@ -11,6 +11,7 @@ import Doctors from "./pages/Doctors";
 import Departments from "./pages/Departments";
 import KedatanganPage from "./pages/KedatanganPage";
 import AntrianPage from "./pages/AntrianPage";
+import PembayaranPasien from "./pages/PembayaranPasien";
 import PemeriksaanPage from "./pages/PemeriksaanPage";
 import PembayaranPage from "./pages/PembayaranPage";
 import PengambilanObatPage from "./pages/PengambilanObatPage";
@@ -18,18 +19,6 @@ import ManajemenUserPage from "./pages/ManajemenUserPage";
 import ManajemenRoles from "./pages/ManajemenRoles";
 import LoginPage from "./pages/LoginPage";
 
-const Layout = ({ children }) => (
-  <Container fluid>
-    <Row className="vh-100">
-      <Col md={2} className="p-0 bg-dark">
-        <Sidebar />
-      </Col>
-      <Col md={10} className="p-4">
-        {children}
-      </Col>
-    </Row>
-  </Container>
-);
 
 export default function App() {
   return (
@@ -104,6 +93,17 @@ export default function App() {
           <PrivateRoute>
             <Layout>
               <AntrianPage />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+      {/* PembayaranPasien */}
+      <Route
+        path="/Pembayaran-Pasien"
+        element={
+          <PrivateRoute>
+            <Layout>
+              <PembayaranPasien />
             </Layout>
           </PrivateRoute>
         }

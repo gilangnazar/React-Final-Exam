@@ -1,9 +1,8 @@
 import React from "react";
-import { Row, Col, Card, Button } from "react-bootstrap";
+import { Row, Col, Card } from "react-bootstrap";
 import { FaUserInjured, FaStethoscope } from "react-icons/fa6";
 import { GiPayMoney, GiMedicines } from "react-icons/gi";
 import { Bar, Line, Doughnut, Pie } from "react-chartjs-2";
-import { useNavigate } from "react-router-dom";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -29,19 +28,6 @@ ChartJS.register(
 );
 
 const DashboardPage = () => {
-  const navigate = useNavigate();
-
-  // Fungsi logout
-const handleLogout = () => {
-  // Hapus semua data autentikasi
-  localStorage.removeItem("token");
-  localStorage.removeItem("username");
-
-  // Redirect ke halaman login
-  navigate("/");
-};
-
-
   const summaryData = [
     { title: "Pasien Hari Ini", count: 120, icon: <FaUserInjured size={30} /> },
     { title: "Pemeriksaan", count: 90, icon: <FaStethoscope size={30} /> },
@@ -99,9 +85,6 @@ const handleLogout = () => {
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3>Dashboard Admin</h3>
-        <Button variant="danger" onClick={handleLogout}>
-          Logout
-        </Button>
       </div>
 
       {/* Summary Cards */}

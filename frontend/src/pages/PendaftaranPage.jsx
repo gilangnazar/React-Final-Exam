@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Table, Button, Modal, Form } from "react-bootstrap";
+import { Table, Button, Modal, Form, Row, Col, Card } from "react-bootstrap";
+import { FaUserInjured, FaStethoscope } from "react-icons/fa";
+import { FaUserClock } from "react-icons/fa6";
+import { BiSolidUserDetail } from "react-icons/bi";
 
 const PendaftaranPage = () => {
   const [appointments, setAppointments] = useState([
@@ -8,22 +11,27 @@ const PendaftaranPage = () => {
       schedule_date: "2025-07-08",
       department_id: "Pelayanan umum dan pemeriksaan dasar",
       doctor_id: "Dokter Umum",
-      status: "waiting"
+      status: "waiting",
     },
     {
       appointment_id: 2,
       schedule_date: "2025-07-09",
       department_id: "Spesialisasi anak-anak",
       doctor_id: "Dokter Anak",
-      status: "confirmed"
-    }
+      status: "confirmed",
+    },
   ]);
+
+  const summaryData = [
+    { title: " Nomor Antrian Anda", count: 10, icon: <FaUserClock size={30} /> },
+    { title: "Nomor Antrian Sekarang", count: 5, icon: <BiSolidUserDetail size={30} /> },
+  ];
 
   const [formData, setFormData] = useState({
     schedule_date: "",
     department_id: "",
     doctor_id: "",
-    status: "waiting"
+    status: "waiting",
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -54,7 +62,7 @@ const PendaftaranPage = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -65,7 +73,7 @@ const PendaftaranPage = () => {
       schedule_date: formData.schedule_date,
       department_id: formData.department_id,
       doctor_id: formData.doctor_id,
-      status: formData.status
+      status: formData.status,
     };
     setAppointments([...appointments, newAppointment]);
     setShowModal(false);
@@ -73,12 +81,28 @@ const PendaftaranPage = () => {
       schedule_date: "",
       department_id: "",
       doctor_id: "",
-      status: "waiting"
+      status: "waiting",
     });
   };
 
   return (
     <div>
+      {/* Summary Cards - 2 dan diposisikan ke tengah */}
+      <Row className="mb-4 justify-content-center">
+        {summaryData.map((item, idx) => (
+          <Col key={idx} md={4} className="mb-3">
+            <Card className="text-center shadow-sm">
+              <Card.Body>
+                <div className="mb-2">{item.icon}</div>
+                <Card.Title style={{ fontSize: "1rem" }}>{item.title}</Card.Title>
+                <h4>{item.count}</h4>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+
+      {/* Header dan Button */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3>Daftar Online</h3>
         <Button variant="primary" onClick={() => setShowModal(true)}>
@@ -86,6 +110,7 @@ const PendaftaranPage = () => {
         </Button>
       </div>
 
+      {/* Tabel */}
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -148,6 +173,7 @@ const PendaftaranPage = () => {
                 required
               />
             </Form.Group>
+
             <Button type="submit" variant="success" className="w-100">
               Simpan
             </Button>
