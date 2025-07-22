@@ -14,6 +14,11 @@ exports.createAppointment = async (req, res) => {
     if (!schedule_date || !department_id || !doctor_id)
       return res.status(400).json({ msg: 'Incomplete data' });
 
+    const queryCheckMultipleAppointment = `SELECT * FROM appointments WHERE patient_id = 1 AND schedule_date = CURDATE() AND department_id = 1 AND status IN ('waiting', 'confirmed');`;
+    const [checkMultipleAppointment] = await db.execute(queryCheckMultipleAppointment);
+    if (checkMultipleAppointment.length > 0)
+      return res.status(400).json({ msg: 'Tidak dapat membuat 2 Pertemuan di Poli yang sama' });
+
     const status = 'waiting';
 
     await db.execute(
