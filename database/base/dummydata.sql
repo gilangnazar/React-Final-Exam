@@ -24,14 +24,14 @@ INSERT INTO medicines (medicine_id, name, stock, price) VALUES
 (5, 'Vitamin C 500mg', 300, 1000.00);
 
 
--- GANTI PASSWORD DENGAN HASH: 
+-- GANTI PASSWORD DENGAN HASH (password123): $2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO
 INSERT INTO users (user_id, username, password_hash, full_name, role_id) VALUES
-(1, 'pasien01', 'hashedpass1', 'Ahmad Ridwan', 1),
-(2, 'pendaftaran01', 'hashedpass2', 'Siti Maesaroh', 2),
-(3, 'dokter01', 'hashedpass3', 'Dr. Budi Santoso', 3),
-(4, 'kasir01', 'hashedpass4', 'Dewi Kartika', 4),
-(5, 'apoteker01', 'hashedpass5', 'Agus Pranowo', 5),
-(6, 'admin01', 'hashedpass6', 'Lina Wahyuni', 6);
+(1, 'pasien01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Ahmad Ridwan', 1),
+(2, 'pendaftaran01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Siti Maesaroh', 2),
+(3, 'dokter01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Dr. Budi Santoso', 3),
+(4, 'kasir01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Dewi Kartika', 4),
+(5, 'apoteker01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Agus Pranowo', 5),
+(6, 'admin01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Lina Wahyuni', 6);
 
 INSERT INTO patients (patient_id, user_id, nik, gender, birth_date, phone, address) VALUES
 (1, 1, '3271012300010001', 'L', '1990-05-14', '081234567890', 'Jl. Merdeka No. 10, Bandung');
