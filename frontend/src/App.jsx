@@ -17,11 +17,13 @@ import PengambilanObatPage from "./pages/PengambilanObatPage";
 import ManajemenUserPage from "./pages/ManajemenUserPage";
 import ManajemenRoles from "./pages/ManajemenRoles";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
       <Route
         path="/dashboard"

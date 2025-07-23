@@ -1,62 +1,51 @@
-// src/pages/LoginPage.jsx
-import React, { useCallback, useEffect } from "react";
+import React, { useState } from "react";
+import { Card, Form, Button, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Card, Form, Button } from "react-bootstrap";
-import { useNavigate, Link } from "react-router-dom"; // <-- Tambah Link
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    full_name: "",
+  });
+  const [error, setError] = useState("");
 
-  const redirectByRole = {
-    1: "/dashboard",
-    2: "/pemeriksaan",
-    3: "/pendaftaran",
-    4: "/pengambilan-obat",
-    5: "/pembayaran",
-    6: "/kedatangan",
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const role = parseInt(localStorage.getItem("userRole"));
-    if (token && role && redirectByRole[role]) {
-      navigate(redirectByRole[role]);
-    }
-  }, [navigate]);
-
-  const handleLogin = useCallback(async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const username = e.target.username.value.trim();
-    const password = e.target.password.value;
+    const { username, password, full_name } = formData;
 
-    if (!username || !password) {
-      alert("Username dan Password tidak boleh kosong.");
+    if (!username || !password || !full_name) {
+      setError("Semua field wajib diisi.");
       return;
     }
 
     try {
-      const response = await axios.post("http://localhost:4000/api/login", {
+      const response = await axios.post("http://localhost:4000/api/pasien/register", {
         username,
         password,
+        full_name,
       });
 
-      const { token, data } = response.data;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("data_user", JSON.stringify(data));
-      localStorage.setItem("userRole", data.role_id);
-
-      const redirectPath = redirectByRole[data.role_id] || "/";
-      navigate(redirectPath);
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        alert("Username atau password salah.");
+      alert("Registrasi berhasil! Silakan login.");
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+      if (err.response && err.response.status === 409) {
+        setError("Username sudah digunakan.");
       } else {
-        alert("Gagal login. Silakan coba lagi.");
+        setError("Terjadi kesalahan saat registrasi.");
       }
-      console.error("Login error:", error);
     }
-  }, [navigate]);
+  };
 
   return (
     <div
@@ -73,7 +62,7 @@ export default function LoginPage() {
         className="bg-white rounded shadow-lg d-flex overflow-hidden"
         style={{ maxWidth: "900px", width: "100%" }}
       >
-        {/* Left Logo */}
+        {/* Kiri - Logo */}
         <div
           style={{
             flex: "1",
@@ -91,19 +80,37 @@ export default function LoginPage() {
           />
         </div>
 
-        {/* Right Form */}
+        {/* Kanan - Form */}
         <div className="p-4" style={{ flex: "1" }}>
           <div className="text-center mb-3">
-            <h1 className="mt-2">Rumah Sakit</h1>
+            <h1 className="mt-2">Daftar Akun Pasien</h1>
           </div>
-          <p className="text-center mb-4">Masukkan Username dan Password</p>
+          <p className="text-center mb-4">Lengkapi data di bawah untuk mendaftar</p>
 
-          <Form onSubmit={handleLogin}>
+          {error && <Alert variant="danger">{error}</Alert>}
+
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="text"
+                placeholder="Nama Lengkap"
+                name="full_name"
+                value={formData.full_name}
+                onChange={handleChange}
+                style={{
+                  borderRadius: "50px",
+                  border: "1px solid #0d6efd",
+                  padding: "0.75rem 1rem",
+                }}
+              />
+            </Form.Group>
             <Form.Group className="mb-3">
               <Form.Control
                 type="text"
                 placeholder="Username"
                 name="username"
+                value={formData.username}
+                onChange={handleChange}
                 style={{
                   borderRadius: "50px",
                   border: "1px solid #0d6efd",
@@ -116,6 +123,8 @@ export default function LoginPage() {
                 type="password"
                 placeholder="Password"
                 name="password"
+                value={formData.password}
+                onChange={handleChange}
                 style={{
                   borderRadius: "50px",
                   border: "1px solid #0d6efd",
@@ -133,15 +142,12 @@ export default function LoginPage() {
                 border: "none",
               }}
             >
-              SIGN IN
+              SIGN UP
             </Button>
           </Form>
 
           <div className="text-center mt-3" style={{ fontSize: "0.9rem" }}>
-            Belum punya akun?{" "}
-            <Link to="/register" style={{ color: "#0d6efd", textDecoration: "none" }}>
-              Sign Up
-            </Link>
+            Sudah punya akun? <a href="/login">Login di sini</a>
           </div>
         </div>
       </div>
