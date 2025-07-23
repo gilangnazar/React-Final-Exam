@@ -1,5 +1,6 @@
 const express = require('express');
 const medicinesController = require('../controllers/medicinesController');
+const departmentsController = require('../controllers/departmentsController');
 
 const router = express.Router();
 
@@ -11,14 +12,10 @@ router.delete('/admin/madicines/:medicine_id', medicinesController.softDeleteMed
 router.put('/admin/madicines/:medicine_id', medicinesController.restoreMedicines);
 
 // Departments
-// router.get('/departments');
-
-// router.post('/departments');
-
-// router.put('/departments/:department_id');
-
-// router.delete('/departments/:department_id');
-
-// router.put('/departments/:department_id/restore');
+router.get('/admin/departments', departmentsController.getDepartments);
+router.post('/admin/departments', departmentsController.postDepartments);
+router.put('/admin/departments/:department_id', departmentsController.putDepartments);
+router.delete('/admin/departments/:department_id', departmentsController.deleteDepartments);
+router.put('/admin/departments/:department_id/restore', departmentsController.restoreDepartments);
 
 module.exports = router;
