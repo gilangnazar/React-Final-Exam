@@ -28,11 +28,11 @@ exports.changePaymentStatusToPaid = async (req, res) => {
     const { payment_id } = req.params;
     const { payment_method } = req.body;
 
-    const query = `UPDATE payments SET payment_method = ?, payment_date = NOW() WHERE payment_id = ?`;
-    const [response] = await connection.execute(query, [payment_method, payment_id]);
+    const query = `UPDATE payments SET payment_method = ?, payment_date = NOW(), payment_status = 'paid' WHERE payment_id = ?`;
+    await connection.execute(query, [payment_method, payment_id]);
 
     await connection.commit();
-    return res.status(200).json({ msg: 'Status payment berhasil di ubah', response });
+    return res.status(200).json({ msg: 'Pembayaran berhasil, Status payment berhasil di ubah' });
   } catch (error) {
     await connection.rollback();
     return res.status(200).json({ msg: 'server error', error });

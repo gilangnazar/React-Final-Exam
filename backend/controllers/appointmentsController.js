@@ -82,7 +82,13 @@ exports.pendaftaranConfirmedAppointments = async (req, res) => {
     const status = queue_number === 1 ? 'calling' : 'waiting';
 
     const queryCraeteQueue = `INSERT INTO queues(appointment_id, queue_number, status) VALUES(?, ?, ?)`;
-    await db.execute(queryCraeteQueue, [appointment_id, queue_number, status]);
+    const [queueResult] = await db.execute(queryCraeteQueue, [appointment_id, queue_number, status]);
+
+    if (queue_number === 1) {
+      const queue_id = queueResult.insertId;
+      const querySetCallTime = `UPDATE queues SET call_time = NOW() WHERE queue_id = ?`;
+      await db.execute(querySetCallTime, [queue_id]);
+    }
 
     return res.status(200).json({ msg: 'Berhasil ubah status Appointment, dan membuat nomor antrian baru' });
   } catch (error) {
@@ -115,5 +121,27 @@ WHERE a.doctor_id = ? AND schedule_date = CURDATE()`;
     res.status(200).json({ msg: 'Data Appointments fetched successfully', data: data });
   } catch (error) {
     res.status(500).json({ msg: 'Server Error', err: error });
+  }
+};
+
+exports.doctorCompletedAppointment = async (req, res) => {
+  let connection;
+  try {
+    connection = await db.getConnection();
+    await connection.beginTransaction();
+
+    const { appointment_id } = req.params;
+
+    const queryChangeQueueStatus = `UPDATE queues SET status = 'done' WHERE appointment_id = ?`;
+    await connection.execute(queryChangeQueueStatus, [appointment_id]);
+
+    const queryChangeAppointmentStatus = `UPDATE appointments SET status = 'completed' WHERE appointment_id = ?`;
+    await connection.execute(queryChangeAppointmentStatus, [appointment_id]);
+
+    await connection.commit();
+    return res.status(200).json({ msg: 'Appointment dan Queue berhasil diselesaikan' });
+  } catch (error) {
+    await connection.rollback();
+    return res.status(500).json({ msg: 'SERVER ERROR', error });
   }
 };
