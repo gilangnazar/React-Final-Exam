@@ -106,26 +106,28 @@ router.post('/pasien/register', async (req, res) => {
   }
 });
 
-router.post('/pasien/:user_id/profile', async (req, res) => {
-  try {
-    const { nik, gender, birth_date, phone, address } = req.body;
-    const { user_id } = req.params;
+router.get('/pasien/:user_id/profile', async (req, res) => {});
 
-    if (!nik || !gender || !birth_date || !phone || !address)
-      return res.status(400).json({ msg: 'Incomplete data' });
+// router.post('/pasien/:user_id/profile', async (req, res) => {
+//   try {
+//     const { nik, gender, birth_date, phone, address } = req.body;
+//     const { user_id } = req.params;
 
-    if (!user_id) return res.status(400).json({ msg: 'User ID is invalid or deleted' });
+//     if (!nik || !gender || !birth_date || !phone || !address)
+//       return res.status(400).json({ msg: 'Incomplete data' });
 
-    await db.execute(
-      'INSERT INTO patients(user_id, nik, gender, birth_date, phone, address) VALUES(?,?,?,?,?,?)',
-      [user_id, nik, gender, birth_date, phone, address]
-    );
+//     if (!user_id) return res.status(400).json({ msg: 'User ID is invalid or deleted' });
 
-    return res.status(201).json({ msg: 'Berhasil menambahkan data Profile Pasien' });
-  } catch (error) {
-    return res.status(500).json({ msg: 'Server error', err: error });
-  }
-});
+//     await db.execute(
+//       'INSERT INTO patients(user_id, nik, gender, birth_date, phone, address) VALUES(?,?,?,?,?,?)',
+//       [user_id, nik, gender, birth_date, phone, address]
+//     );
+
+//     return res.status(201).json({ msg: 'Berhasil menambahkan data Profile Pasien' });
+//   } catch (error) {
+//     return res.status(500).json({ msg: 'Server error', err: error });
+//   }
+// });
 
 router.put('/pasien/:user_id/profile', async (req, res) => {
   try {
