@@ -1,19 +1,41 @@
 // src/pages/LoginPage.jsx
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import axios from "axios";
-import { Card, Form, Button, Alert } from "react-bootstrap";
+import { Card, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [error, setError] = useState("");
+
+  // Mapping role ke path yang diizinkan
+  const redirectByRole = {
+    1: "/dashboard",           // Admin
+    2: "/pemeriksaan",         // Dokter
+    3: "/pendaftaran",         // Pendaftaran
+    4: "/pengambilan-obat",    // Apotek
+    5: "/pembayaran",          // Kasir
+    6: "/kedatangan",          // Petugas kedatangan
+  };
+
+  // Kalau sudah login, langsung redirect ke halaman sesuai role
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = parseInt(localStorage.getItem("userRole"));
+
+    if (token && role && redirectByRole[role]) {
+      navigate(redirectByRole[role]);
+    }
+  }, [navigate]);
 
   const handleLogin = useCallback(async (e) => {
     e.preventDefault();
-    const username = e.target.username.value;
+    const username = e.target.username.value.trim();
     const password = e.target.password.value;
+
+    if (!username || !password) {
+      alert("Username dan Password tidak boleh kosong.");
+      return;
+    }
 
     try {
       const response = await axios.post("http://localhost:4000/api/login", {
@@ -21,20 +43,23 @@ export default function LoginPage() {
         password,
       });
 
-      // Pastikan backend membalas token
-      const { token } = response.data;
-      localStorage.setItem("token", token);
+      const { token, data } = response.data;
 
-      navigate("/dashboard");
+      localStorage.setItem("token", token);
+      localStorage.setItem("data_user", JSON.stringify(data));
+      localStorage.setItem("userRole", data.role_id);
+
+      const redirectPath = redirectByRole[data.role_id] || "/";
+      navigate(redirectPath);
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        alert("Invalid username or password.");
+        alert("Username atau password salah.");
       } else {
-        alert("Login failed. Please try again.");
+        alert("Gagal login. Silakan coba lagi.");
       }
-      console.error(error);
+      console.error("Login error:", error);
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <div
@@ -64,7 +89,7 @@ export default function LoginPage() {
         >
           <img
             src="/Logo/RS.png"
-            alt="Illustration"
+            alt="Logo"
             style={{ maxWidth: "100%", height: "auto" }}
           />
         </div>
@@ -74,10 +99,7 @@ export default function LoginPage() {
           <div className="text-center mb-3">
             <h1 className="mt-2">Rumah Sakit</h1>
           </div>
-          <p className="text-center mb-4">Enter your Username and Password</p>
-
-          {/* ALERT */}
-          
+          <p className="text-center mb-4">Masukkan Username dan Password</p>
 
           <Form onSubmit={handleLogin}>
             <Form.Group className="mb-3">
@@ -120,7 +142,7 @@ export default function LoginPage() {
 
           <div className="text-center mt-3" style={{ fontSize: "0.9rem" }}>
             Belum punya akun? <a href="#">Sign Up</a>
-          </div>  
+          </div>
         </div>
       </div>
     </div>

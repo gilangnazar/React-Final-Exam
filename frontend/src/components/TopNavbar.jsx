@@ -2,9 +2,12 @@ import React from "react";
 import { Navbar, Container, Dropdown } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 
 const TopNavbar = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const tokendecoded = jwtDecode(token);
 
   const handleLogout = () => {
     // Hapus semua data autentikasi
@@ -25,7 +28,7 @@ const TopNavbar = () => {
             className="d-flex align-items-center gap-2 text-white border-0"
           >
             <FaUserCircle size={20} />
-            Admin RS
+            {tokendecoded.full_name}
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
