@@ -1,10 +1,9 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/Layout";
-// import Sidebar from "./components/Sidebar";
 import PrivateRoute from "./components/PrivateRoute";
 
+// Pages
 import DashboardPage from "./pages/DashboardPage";
 import PendaftaranPage from "./pages/PendaftaranPage";
 import Doctors from "./pages/Doctors";
@@ -19,149 +18,125 @@ import ManajemenUserPage from "./pages/ManajemenUserPage";
 import ManajemenRoles from "./pages/ManajemenRoles";
 import LoginPage from "./pages/LoginPage";
 
-
 export default function App() {
   return (
     <Routes>
-      {/* Login */}
       <Route path="/" element={<LoginPage />} />
 
-      {/* Dashboard */}
       <Route
         path="/dashboard"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={[1, 3, 4, 5, 6]}>
             <Layout>
               <DashboardPage />
             </Layout>
           </PrivateRoute>
         }
       />
-
-      {/* Pendaftaran */}
       <Route
         path="/pendaftaran"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={[1, 3]}>
             <Layout>
               <PendaftaranPage />
             </Layout>
           </PrivateRoute>
         }
       />
-
-      {/* Doctors */}
       <Route
         path="/doctors"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={[1, 2]}>
             <Layout>
               <Doctors />
             </Layout>
           </PrivateRoute>
         }
       />
-
-      {/* Departments */}
       <Route
         path="/departments"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={[1, 2]}>
             <Layout>
               <Departments />
             </Layout>
           </PrivateRoute>
         }
       />
-
-      {/* Kedatangan */}
       <Route
         path="/kedatangan"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={[1, 6]}>
             <Layout>
               <KedatanganPage />
             </Layout>
           </PrivateRoute>
         }
       />
-
-      {/* Antrian */}
       <Route
         path="/antrian"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={[1]}>
             <Layout>
               <AntrianPage />
             </Layout>
           </PrivateRoute>
         }
       />
-      {/* PembayaranPasien */}
       <Route
-        path="/Pembayaran-Pasien"
+        path="/pembayaran-pasien"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={[1, 5]}>
             <Layout>
               <PembayaranPasien />
             </Layout>
           </PrivateRoute>
         }
       />
-
-      {/* Pemeriksaan */}
       <Route
         path="/pemeriksaan"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={[1, 2]}>
             <Layout>
               <PemeriksaanPage />
             </Layout>
           </PrivateRoute>
         }
       />
-
-      {/* Pembayaran */}
       <Route
         path="/pembayaran"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={[1, 5]}>
             <Layout>
               <PembayaranPage />
             </Layout>
           </PrivateRoute>
         }
       />
-
-      {/* Pengambilan Obat */}
       <Route
         path="/pengambilan-obat"
         element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={[1, 4]}>
             <Layout>
               <PengambilanObatPage />
             </Layout>
           </PrivateRoute>
         }
       />
-
-      {/* Manajemen User */}
-    <Route
-  path="/manajemen-user"
-  element={
-    <PrivateRoute allowedRoles={[1]}>
-      <Layout>
-        <ManajemenUserPage />
-      </Layout>
-    </PrivateRoute>
-  }
-/>
-
-      {/* Manajemen Roles */}
+      <Route
+        path="/manajemen-user"
+        element={
+          <PrivateRoute allowedRoles={[1]}>
+            <Layout>
+              <ManajemenUserPage />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/manajemen-roles"
         element={
-         <PrivateRoute allowedRoles={[1]}>
+          <PrivateRoute allowedRoles={[1]}>
             <Layout>
               <ManajemenRoles />
             </Layout>
@@ -169,7 +144,6 @@ export default function App() {
         }
       />
 
-      {/* Fallback */}
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
