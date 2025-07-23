@@ -13,6 +13,7 @@ const pendaftaran = require('./routes/pendaftaran');
 const doctors = require('./routes/doctors');
 const kasir = require('./routes/kasir');
 const apoteker = require('./routes/apoteker');
+const admin = require('./routes/admin');
 
 require('dotenv').config();
 
@@ -39,6 +40,7 @@ app.use('/api', pendaftaran);
 app.use('/api', doctors);
 app.use('/api', kasir);
 app.use('/api', apoteker);
+app.use('/api', admin);
 
 app.listen(PORT, () => {
   console.log(`app run in port: ${PORT}`);
