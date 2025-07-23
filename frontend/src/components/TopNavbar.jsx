@@ -8,7 +8,7 @@ const TopNavbar = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const tokendecoded = jwtDecode(token);
-   
+
   const handleLogout = () => {
     // Hapus semua data autentikasi
     localStorage.removeItem("token");
@@ -32,7 +32,7 @@ const TopNavbar = () => {
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <Dropdown.Item href="#/profile">Profile</Dropdown.Item>
+            <Dropdown.Item href="/profil">Profile</Dropdown.Item>
             <Dropdown.Divider />
             <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
           </Dropdown.Menu>
