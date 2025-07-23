@@ -82,7 +82,13 @@ exports.pendaftaranConfirmedAppointments = async (req, res) => {
     const status = queue_number === 1 ? 'calling' : 'waiting';
 
     const queryCraeteQueue = `INSERT INTO queues(appointment_id, queue_number, status) VALUES(?, ?, ?)`;
-    await db.execute(queryCraeteQueue, [appointment_id, queue_number, status]);
+    const [queueResult] = await db.execute(queryCraeteQueue, [appointment_id, queue_number, status]);
+
+    if (queue_number === 1) {
+      const queue_id = queueResult.insertId;
+      const querySetCallTime = `UPDATE queues SET call_time = NOW() WHERE queue_id = ?`;
+      await db.execute(querySetCallTime, [queue_id]);
+    }
 
     return res.status(200).json({ msg: 'Berhasil ubah status Appointment, dan membuat nomor antrian baru' });
   } catch (error) {
