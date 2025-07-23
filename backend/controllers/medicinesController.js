@@ -59,7 +59,7 @@ exports.softDeleteMedicines = async (req, res) => {
 
     await db.execute('UPDATE medicines SET deleted_at = NOW() WHERE medicine_id = ?', [medicine_id]);
 
-    return res.json({ msg: 'Departemen berhasil Terhapus (Soft delete)' });
+    return res.json({ msg: 'Data obat berhasil Terhapus (Soft delete)' });
   } catch (error) {
     return res.status(500).json({ msg: 'Server error', err: error.message });
   }
