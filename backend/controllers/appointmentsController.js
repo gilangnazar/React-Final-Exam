@@ -123,3 +123,25 @@ WHERE a.doctor_id = ? AND schedule_date = CURDATE()`;
     res.status(500).json({ msg: 'Server Error', err: error });
   }
 };
+
+exports.doctorCompletedAppointment = async (req, res) => {
+  let connection;
+  try {
+    connection = await db.getConnection();
+    await connection.beginTransaction();
+
+    const { appointment_id } = req.params;
+
+    const queryChangeQueueStatus = `UPDATE queues SET status = 'done' WHERE appointment_id = ?`;
+    await connection.execute(queryChangeQueueStatus, [appointment_id]);
+
+    const queryChangeAppointmentStatus = `UPDATE appointments SET status = 'completed' WHERE appointment_id = ?`;
+    await connection.execute(queryChangeAppointmentStatus, [appointment_id]);
+
+    await connection.commit();
+    return res.status(200).json({ msg: 'Appointment dan Queue berhasil diselesaikan' });
+  } catch (error) {
+    await connection.rollback();
+    return res.status(500).json({ msg: 'SERVER ERROR', error });
+  }
+};

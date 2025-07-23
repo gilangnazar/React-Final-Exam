@@ -9,6 +9,10 @@ const router = express.Router();
 router.get('/doctors/:user_id/appointments', appointmentsController.doctorFetchAppointments);
 router.post('/doctors/:user_id/examinations', examinationsController.createExamination);
 router.post('/doctors/prescriptions', prescriptionsController.createPrescription);
+router.put(
+  '/doctors/appointments/:appointment_id/completed',
+  appointmentsController.doctorCompletedAppointment
+);
 
 router.get('/doctors', async (req, res) => {
   try {
