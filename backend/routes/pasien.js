@@ -106,7 +106,36 @@ router.post('/pasien/register', async (req, res) => {
   }
 });
 
-router.get('/pasien/:user_id/profile', async (req, res) => {});
+router.get('/pasien/:user_id/profile', async (req, res) => {
+  try {
+    const query = `SELECT 
+  u.user_id,
+  u.username,
+  u.full_name,
+  p.patient_id,
+  p.nik,
+  p.phone,
+  p.gender,
+  p.birth_date,
+  p.address
+FROM users u
+JOIN patients p ON p.user_id = u.user_id
+WHERE u.user_id = 1;`;
+
+    const [data] = await db.execute(query);
+    if (data.length === 0) return res.status(400).json({ msg: 'profile tidak ditemukan' });
+
+    return res.status(200).json({
+      msg: 'Profile Pasien',
+      data: data,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      msg: 'Server Error',
+      error: error,
+    });
+  }
+});
 
 // router.post('/pasien/:user_id/profile', async (req, res) => {
 //   try {
