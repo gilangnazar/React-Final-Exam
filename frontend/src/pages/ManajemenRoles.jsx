@@ -14,7 +14,7 @@ const ManajemenRoles = () => {
   });
   const [isEdit, setIsEdit] = useState(false);
 
-  const apiUrl = "http://localhost:4000/api/roles"; // Ganti sesuai backend
+  const apiUrl = "http://localhost:4000/api/admin/roles"; // Ganti sesuai backend
 
   const fetchRoles = async () => {
     setLoading(true);

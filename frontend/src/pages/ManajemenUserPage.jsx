@@ -17,7 +17,7 @@ const ManajemenUserPage = () => {
   });
   const [isEdit, setIsEdit] = useState(false);
 
-  const apiUrl = "http://localhost:4000/api/users"; // ganti sesuai backend-mu
+  const apiUrl = "http://localhost:4000/api/admin/users"; // ganti sesuai backend-mu
 
   const fetchUsers = async () => {
     setLoading(true);
