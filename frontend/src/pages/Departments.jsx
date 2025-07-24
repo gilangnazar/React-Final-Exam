@@ -14,7 +14,8 @@ export default function Departments() {
   // Ambil data
   const fetchDepartments = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/departments");
+      const res = await axios.get("http://localhost:4000/api/admin/departments");
+      console.log('Data departments:', res.data.data);
       setDepartments(res.data.data);
     } catch (error) {
       console.error("Error fetching data:", error);
