@@ -3,6 +3,7 @@ const medicinesController = require('../controllers/medicinesController');
 const departmentsController = require('../controllers/departmentsController');
 const rolesController = require('../controllers/rolesController');
 const usersController = require('../controllers/usersController');
+const patientsController = require('../controllers/patientsController');
 
 const router = express.Router();
 
@@ -33,5 +34,16 @@ router.post('/admin/users', usersController.postUsers);
 router.put('/admin/users/:user_id', usersController.putUsers);
 router.delete('/admin/users/:user_id', usersController.deleteUsers);
 router.put('/admin/users/:user_id/restore', usersController.restoreUsers);
+
+// Patients
+router.get('/admin/patients', patientsController.getAllPatients);
+router.delete('/admin/patients/:patient_id', patientsController.softDeletePatients);
+router.put('/admin/patients/:patient_id/restore', patientsController.restorePatients);
+router.put('/admin/patients/:patient_id/deactivate', patientsController.deactivatePatient);
+router.put('/admin/patients/:patient_id/activate', patientsController.activatePatient);
+
+// Appointments
+router.get('/admin/appointments', );
+
 
 module.exports = router;

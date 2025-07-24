@@ -2,9 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-const departments = require('./routes/departments');
-const medicines = require('./routes/medicines');
-const roles = require('./routes/roles');
 const auth = require('./routes/auth');
 
 const pasien = require('./routes/pasien');
@@ -28,9 +25,6 @@ app.use(
 
 app.use(bodyParser.json());
 
-app.use('/api', departments);
-app.use('/api', medicines);
-app.use('/api', roles);
 app.use('/api', auth);
 
 app.use('/api', pasien);
