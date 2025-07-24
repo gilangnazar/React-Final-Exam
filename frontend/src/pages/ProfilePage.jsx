@@ -24,13 +24,33 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/api/pasien/${userId}/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
+        const res = await axios.get(`http://localhost:4000/api/pasien/${userId}/profile`);
+        console.log('data profile:', res.data.data[0]);
+
+        // Simpan ke state profile
+        const fetchedData = res.data.data[0];
+        if (fetchedData && fetchedData.birth_date) {
+        fetchedData.birth_date = fetchedData.birth_date.slice(0, 10);
+      }
+        setProfile(fetchedData);
+
+        // Set ke form kalau data ada, kalau tidak isi form kosong
+        setForm(fetchedData || {
+          nik: "",
+          gender: "",
+          birth_date: "",
+          phone: "",
+          address: "",
         });
-        setProfile(res.data);
-        setForm(res.data);
       } catch (err) {
         console.log("Belum ada data profil");
+        setForm({
+          nik: "",
+          gender: "",
+          birth_date: "",
+          phone: "",
+          address: "",
+        });
       } finally {
         setLoading(false);
       }
@@ -45,9 +65,11 @@ const ProfilePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:4000/api/pasien/${userId}/profile`, form, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+        `http://localhost:4000/api/pasien/${userId}/profile`,
+        form,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       toast.success("Profil berhasil diperbarui");
       setProfile(form);
       setShowModal(false);
