@@ -18,6 +18,7 @@ import {
 import { BsBuildingsFill } from "react-icons/bs";
 import { GiArchiveRegister } from "react-icons/gi";
 import { TbCashRegister } from "react-icons/tb";
+import { GiMedicines } from "react-icons/gi";
 
 const Sidebar = () => {
   const role = parseInt(localStorage.getItem("userRole"));
@@ -94,6 +95,12 @@ const Sidebar = () => {
       path: "/Pembayaran-Pasien",
       icon: <TbCashRegister />,
       roles: [1, 5],
+    },
+    {
+      label: "Manajemen Obat",
+      path: "/Manajemen-Obat",
+      icon: <GiMedicines />,
+      roles: [1],
     },
   ];
 

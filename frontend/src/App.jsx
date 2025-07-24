@@ -19,6 +19,7 @@ import ManajemenRoles from "./pages/ManajemenRoles";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
+import ManajemenObat from "./pages/ManajemenObat";
 
 export default function App() {
   return (
@@ -153,6 +154,16 @@ export default function App() {
           <PrivateRoute allowedRoles={[1]}>
             <Layout>
               <ManajemenRoles />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/manajemen-obat"
+        element={
+          <PrivateRoute allowedRoles={[1]}>
+            <Layout>
+              <ManajemenObat />
             </Layout>
           </PrivateRoute>
         }
