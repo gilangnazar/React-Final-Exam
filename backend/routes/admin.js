@@ -2,6 +2,7 @@ const express = require('express');
 const medicinesController = require('../controllers/medicinesController');
 const departmentsController = require('../controllers/departmentsController');
 const rolesController = require('../controllers/rolesController');
+const usersController = require('../controllers/usersController');
 
 const router = express.Router();
 
@@ -25,5 +26,12 @@ router.post('/admin/roles', rolesController.postRoles);
 router.put('/admin/roles/:role_id', rolesController.putRoles);
 router.delete('/admin/roles/:role_id', rolesController.softDeleteRoles);
 router.put('/admin/roles/:role_id/restore', rolesController.restoreRoles);
+
+// Users
+router.get('/admin/users', usersController.getUsers);
+router.post('/admin/users', usersController.postUsers);
+router.put('/admin/users/:user_id', usersController.putUsers);
+router.delete('/admin/users/:user_id', usersController.deleteUsers);
+router.put('/admin/users/:user_id/restore', usersController.restoreUsers);
 
 module.exports = router;

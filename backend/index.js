@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 
 const departments = require('./routes/departments');
 const medicines = require('./routes/medicines');
-const users = require('./routes/users');
 const roles = require('./routes/roles');
 const auth = require('./routes/auth');
 
@@ -31,7 +30,6 @@ app.use(bodyParser.json());
 
 app.use('/api', departments);
 app.use('/api', medicines);
-app.use('/api', users);
 app.use('/api', roles);
 app.use('/api', auth);
 

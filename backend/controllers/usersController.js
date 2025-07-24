@@ -1,9 +1,7 @@
-const express = require('express');
 const db = require('../db');
+const bcrypt = require('bcrypt');
 
-const router = express.Router();
-
-router.get('/users', async (req, res) => {
+exports.getUsers = async (req, res) => {
   try {
     const [data] = await db.execute(`
       SELECT 
@@ -23,13 +21,15 @@ router.get('/users', async (req, res) => {
       err: error,
     });
   }
-});
+};
 
-router.post('/users', async (req, res) => {
+exports.postUsers = async (req, res) => {
   try {
-    const { username, password_hash, full_name, role_id } = req.body;
-    if (!username || !password_hash || !full_name || !role_id)
+    const { username, password, full_name, role_id } = req.body;
+    if (!username || !password || !full_name || !role_id)
       return res.status(400).json({ msg: 'Incomplete data' });
+
+    const password_hash = await bcrypt.hash(password, 10);
 
     await db.execute('INSERT INTO users(username, password_hash, full_name, role_id) VALUES(?,?,?,?)', [
       username,
@@ -42,16 +42,18 @@ router.post('/users', async (req, res) => {
   } catch (error) {
     return res.status(500).json({ msg: 'Server error', err: error });
   }
-});
+};
 
-router.put('/users/:user_id', async (req, res) => {
+exports.putUsers = async (req, res) => {
   try {
-    const { username, password_hash, full_name, role_id } = req.body;
+    const { username, password, full_name, role_id } = req.body;
     const { user_id } = req.params;
 
-    if (!username || !password_hash || !full_name || !role_id)
+    if (!username || !password || !full_name || !role_id)
       return res.status(400).json({ msg: 'Incomplete data' });
     if (!user_id) return res.status(400).json({ msg: 'User ID Is Invalid or Missing' });
+
+    const password_hash = await bcrypt.hash(password, 10);
 
     await db.execute(
       'UPDATE users SET username = ?, password_hash = ?, full_name = ?, role_id = ? WHERE user_id = ?',
@@ -62,9 +64,9 @@ router.put('/users/:user_id', async (req, res) => {
   } catch (error) {
     return res.status(500).json({ msg: 'Server error', err: error.message });
   }
-});
+};
 
-router.delete('/users/:user_id', async (req, res) => {
+exports.deleteUsers = async (req, res) => {
   try {
     const { user_id } = req.params;
     if (!user_id) return res.status(400).json({ msg: 'User ID Is Invalid or Missing' });
@@ -75,9 +77,9 @@ router.delete('/users/:user_id', async (req, res) => {
   } catch (error) {
     return res.status(500).json({ msg: 'Server error', err: error.message });
   }
-});
+};
 
-router.put('/users/:user_id/restore', async (req, res) => {
+exports.restoreUsers = async (req, res) => {
   try {
     const { user_id } = req.params;
     if (!user_id) return res.status(400).json({ msg: 'User ID Is Invalid or Missing' });
@@ -88,6 +90,4 @@ router.put('/users/:user_id/restore', async (req, res) => {
   } catch (error) {
     return res.status(500).json({ msg: 'Server error', err: error.message });
   }
-});
-
-module.exports = router;
+};
