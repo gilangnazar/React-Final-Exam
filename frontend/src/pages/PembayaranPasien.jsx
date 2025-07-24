@@ -1,35 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, Form } from "react-bootstrap";
-
-const dummyData = [
-  {
-    id: 1,
-    nama: "Ahmad",
-    tanggal: "2025-07-22",
-    poli: "Umum",
-    status: "Belum Dibayar",
-    obat: [
-      { nama: "Paracetamol", harga: 10000 },
-      { nama: "Vitamin C", harga: 15000 },
-    ],
-  },
-  {
-    id: 2,
-    nama: "Siti",
-    tanggal: "2025-07-22",
-    poli: "Anak",
-    status: "Sudah Dibayar",
-    obat: [
-      { nama: "Obat Batuk", harga: 20000 },
-    ],
-  },
-];
+import axios from "axios";
 
 const PembayaranPasien = () => {
-  const [data] = useState(dummyData);
+  const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
   const [selected, setSelected] = useState(null);
   const [metodePembayaran, setMetodePembayaran] = useState("cash");
+
+  // Ambil data dari backend
+  const fetchPayments = async () => {
+    try {
+      const res = await axios.get("http://localhost:4000/api/kasir/payments");
+      setData(res.data.data);
+    } catch (error) {
+      console.error("Gagal fetch data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPayments();
+  }, []);
 
   const handleClose = () => {
     setShow(false);
@@ -41,12 +32,21 @@ const PembayaranPasien = () => {
     setShow(true);
   };
 
-  const handleBayar = () => {
-    alert("Pembayaran berhasil dengan metode: " + metodePembayaran);
-    handleClose();
+  const handleBayar = async () => {
+    try {
+      await axios.put(
+        `http://localhost:4000/api/kasir/payments/${selected.payment_id}/paid`,
+        { metode: metodePembayaran }
+      );
+      fetchPayments();
+      handleClose();
+    } catch (error) {
+      console.error("Gagal update status pembayaran:", error);
+    }
   };
 
   const hitungBiayaObat = (obatList) => {
+    if (!Array.isArray(obatList)) return 0;
     return obatList.reduce((total, item) => total + item.harga, 0);
   };
 
@@ -65,13 +65,13 @@ const PembayaranPasien = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((pasien, idx) => (
-            <tr key={pasien.id}>
+          {Array.isArray(data) && data.map((pasien, idx) => (
+            <tr key={pasien.payment_id}>
               <td>{idx + 1}</td>
-              <td>{pasien.nama}</td>
-              <td>{pasien.tanggal}</td>
+              <td>{pasien.full_name}</td>
+              <td>{pasien.schedule_date}</td>
               <td>{pasien.poli}</td>
-              <td>{pasien.status}</td>
+              <td>{pasien.payment_status}</td>
               <td>
                 <Button
                   variant="primary"
@@ -86,7 +86,6 @@ const PembayaranPasien = () => {
         </tbody>
       </Table>
 
-      {/* Modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Tagihan Pasien</Modal.Title>
@@ -94,11 +93,9 @@ const PembayaranPasien = () => {
         <Modal.Body>
           {selected && (
             <>
-              <p><strong>Biaya Pemeriksaan:</strong> Rp 50.000</p>
-              <p><strong>Biaya Obat:</strong> Rp {hitungBiayaObat(selected.obat).toLocaleString()}</p>
               <p>
                 <strong>Total Tagihan:</strong>{" "}
-                Rp {(50000 + hitungBiayaObat(selected.obat)).toLocaleString()}
+                Rp {(50000 + hitungBiayaObat(selected.obat || [])).toLocaleString()}
               </p>
               <Form.Group>
                 <Form.Label>Metode Pembayaran</Form.Label>
