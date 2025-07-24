@@ -5,11 +5,11 @@ const departmentsController = require('../controllers/departmentsController');
 const router = express.Router();
 
 // Medicines
-router.get('/admin/madicines', medicinesController.getMedicines);
-router.post('/admin/madicines', medicinesController.postMedicines);
-router.put('/admin/madicines/:medicine_id', medicinesController.putMedicines);
-router.delete('/admin/madicines/:medicine_id', medicinesController.softDeleteMedicines);
-router.put('/admin/madicines/:medicine_id', medicinesController.restoreMedicines);
+router.get('/admin/medicines', medicinesController.getMedicines);
+router.post('/admin/medicines', medicinesController.postMedicines);
+router.put('/admin/medicines/:medicine_id', medicinesController.putMedicines);
+router.delete('/admin/medicines/:medicine_id', medicinesController.softDeleteMedicines);
+router.put('/admin/medicines/:medicine_id', medicinesController.restoreMedicines);
 
 // Departments
 router.get('/admin/departments', departmentsController.getDepartments);

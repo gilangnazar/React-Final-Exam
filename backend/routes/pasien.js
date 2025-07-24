@@ -108,6 +108,8 @@ router.post('/pasien/register', async (req, res) => {
 
 router.get('/pasien/:user_id/profile', async (req, res) => {
   try {
+    const { user_id } = req.params;
+
     const query = `SELECT 
   u.user_id,
   u.username,
@@ -120,9 +122,9 @@ router.get('/pasien/:user_id/profile', async (req, res) => {
   p.address
 FROM users u
 JOIN patients p ON p.user_id = u.user_id
-WHERE u.user_id = 1;`;
+WHERE u.user_id = ?;`;
 
-    const [data] = await db.execute(query);
+    const [data] = await db.execute(query, [user_id]);
     if (data.length === 0) return res.status(400).json({ msg: 'profile tidak ditemukan' });
 
     return res.status(200).json({
