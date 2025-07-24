@@ -2,7 +2,7 @@ const db = require('../db');
 
 exports.fetchPayments = async (req, res) => {
   try {
-    const queryFetchPayments = `SELECT u.full_name, a.schedule_date, d.name as poli, pay.payment_method, pay.payment_status, pay.total_amount
+    const queryFetchPayments = `SELECT pay.payment_id, u.full_name, a.schedule_date, d.name as poli, pay.payment_method, pay.payment_status, pay.total_amount
 FROM payments pay 
 JOIN appointments a ON pay.appointment_id = a.appointment_id
 JOIN patients p ON a.patient_id = p.patient_id
@@ -20,6 +20,7 @@ ORDER BY a.schedule_date DESC`;
 };
 
 exports.changePaymentStatusToPaid = async (req, res) => {
+  console.log("masuk ke changePaymentStatusToPaid");
   let connection;
   try {
     connection = await db.getConnection();
