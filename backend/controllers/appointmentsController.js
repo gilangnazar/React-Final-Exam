@@ -1,6 +1,54 @@
 const db = require('../db');
 const { getPatientId, getDoctorId } = require('../utils/userRoles');
 
+// ROLE: ADMIN
+exports.adminGetAllAppointments = async (req, res) => {
+  try {
+    query = `SELECT a.appointment_id, u.full_name, a.schedule_date, dep.name as department_name, a.status
+FROM appointments a 
+JOIN departments dep ON dep.department_id = a.department_id
+JOIN patients p ON a.patient_id = p.patient_id
+JOIN users u ON p.user_id = u.user_id
+WHERE a.deleted_at IS null`;
+
+    const [data] = await db.execute(query);
+
+    return res.status(200).json({ msg: 'Data Appointments fetched successfully', data: data });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Server Error', err: error });
+  }
+};
+
+exports.adminSoftDeleteAppointment = async (req, res) => {
+  try {
+    const { appointment_id } = req.params;
+
+    if (!appointment_id) return res.status(400).json({ msg: 'Invalid Appointment ID' });
+
+    const query = `UPDATE appointments SET deleted_at = NOW() WHERE appointment_id = ?`;
+    await db.execute(query, [appointment_id]);
+
+    return res.status(200).json({ msg: 'Appointment successfully soft deleted' });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Server error', err: error.message });
+  }
+};
+
+exports.adminRestoreAppointment = async (req, res) => {
+  try {
+    const { appointment_id } = req.params;
+
+    if (!appointment_id) return res.status(400).json({ msg: 'Invalid Appointment ID' });
+
+    const query = `UPDATE appointments SET deleted_at = NULL WHERE appointment_id = ?`;
+    await db.execute(query, [appointment_id]);
+
+    return res.status(200).json({ msg: 'Appointment successfully restored' });
+  } catch (error) {
+    return res.status(500).json({ msg: 'Server error', err: error.message });
+  }
+};
+
 // ROLE: PASIEN
 exports.createAppointment = async (req, res) => {
   try {

@@ -4,6 +4,7 @@ const departmentsController = require('../controllers/departmentsController');
 const rolesController = require('../controllers/rolesController');
 const usersController = require('../controllers/usersController');
 const patientsController = require('../controllers/patientsController');
+const appointmentsController = require('../controllers/appointmentsController');
 
 const router = express.Router();
 
@@ -43,7 +44,8 @@ router.put('/admin/patients/:patient_id/deactivate', patientsController.deactiva
 router.put('/admin/patients/:patient_id/activate', patientsController.activatePatient);
 
 // Appointments
-router.get('/admin/appointments', );
-
+router.get('/admin/appointments', appointmentsController.adminGetAllAppointments);
+router.delete('/admin/appointments/:appointment_id', appointmentsController.adminSoftDeleteAppointment);
+router.put('/admin/appointments/:appointment_id/restore', appointmentsController.adminRestoreAppointment);
 
 module.exports = router;
