@@ -5,6 +5,8 @@ const rolesController = require('../controllers/rolesController');
 const usersController = require('../controllers/usersController');
 const patientsController = require('../controllers/patientsController');
 const appointmentsController = require('../controllers/appointmentsController');
+const doctorsController = require('../controllers/doctorsController');
+const queuesController = require('../controllers/queuesController');
 
 const router = express.Router();
 
@@ -47,5 +49,13 @@ router.put('/admin/patients/:patient_id/activate', patientsController.activatePa
 router.get('/admin/appointments', appointmentsController.adminGetAllAppointments);
 router.delete('/admin/appointments/:appointment_id', appointmentsController.adminSoftDeleteAppointment);
 router.put('/admin/appointments/:appointment_id/restore', appointmentsController.adminRestoreAppointment);
+
+// Doctors
+router.get('/admin/doctors', doctorsController.getAllDoctors);
+router.delete('/admin/doctors/:doctor_id', doctorsController.softDeleteDoctor);
+router.put('/admin/doctors/:doctor_id/restore', doctorsController.restoreDoctor);
+
+// Queues
+router.get('/admin/queues', queuesController.getAllQueues);
 
 module.exports = router;
