@@ -34,13 +34,13 @@ const Sidebar = () => {
       label: "Pendaftaran",
       path: "/pendaftaran",
       icon: <GiArchiveRegister />,
-      roles: [1, 3],
+      roles: [3],
     },
     {
       label: "Kedatangan",
       path: "/kedatangan",
       icon: <FaUserCheck />,
-      roles: [1, 6],
+      roles: [6],
     },
     {
       label: "Doctors",
@@ -64,19 +64,19 @@ const Sidebar = () => {
       label: "Pemeriksaan",
       path: "/pemeriksaan",
       icon: <FaStethoscope />,
-      roles: [1, 2],
+      roles: [2],
     },
     {
       label: "Pembayaran",
       path: "/pembayaran",
       icon: <FaMoneyBill />,
-      roles: [1, 5],
+      roles: [5],
     },
     {
       label: "Pengambilan Obat",
       path: "/pengambilan-obat",
       icon: <FaPills />,
-      roles: [1, 4],
+      roles: [4],
     },
     {
       label: "Manajemen User",
@@ -94,7 +94,7 @@ const Sidebar = () => {
       label: "Pembayaran Pasien",
       path: "/Pembayaran-Pasien",
       icon: <TbCashRegister />,
-      roles: [1, 5],
+      roles: [5],
     },
     {
       label: "Manajemen Obat",

@@ -51,6 +51,8 @@ const PembayaranPasien = () => {
     }
   };
 
+  console.log("Data pasien:", data);
+
   return (
     <div>
       <h3>Pembayaran Pasien tagihan</h3>

@@ -51,7 +51,7 @@ export default function App() {
       <Route
         path="/pendaftaran"
         element={
-          <PrivateRoute allowedRoles={[1, 3]}>
+          <PrivateRoute allowedRoles={[3]}>
             <Layout>
               <PendaftaranPage />
             </Layout>
@@ -81,7 +81,7 @@ export default function App() {
       <Route
         path="/kedatangan"
         element={
-          <PrivateRoute allowedRoles={[1, 6]}>
+          <PrivateRoute allowedRoles={[6]}>
             <Layout>
               <KedatanganPage />
             </Layout>
@@ -101,7 +101,7 @@ export default function App() {
       <Route
         path="/pembayaran-pasien"
         element={
-          <PrivateRoute allowedRoles={[1, 5]}>
+          <PrivateRoute allowedRoles={[5]}>
             <Layout>
               <PembayaranPasien />
             </Layout>
@@ -111,7 +111,7 @@ export default function App() {
       <Route
         path="/pemeriksaan"
         element={
-          <PrivateRoute allowedRoles={[1, 2]}>
+          <PrivateRoute allowedRoles={[2]}>
             <Layout>
               <PemeriksaanPage />
             </Layout>
@@ -121,7 +121,7 @@ export default function App() {
       <Route
         path="/pembayaran"
         element={
-          <PrivateRoute allowedRoles={[1, 5]}>
+          <PrivateRoute allowedRoles={[5]}>
             <Layout>
               <PembayaranPage />
             </Layout>
@@ -131,7 +131,7 @@ export default function App() {
       <Route
         path="/pengambilan-obat"
         element={
-          <PrivateRoute allowedRoles={[1, 4]}>
+          <PrivateRoute allowedRoles={[4]}>
             <Layout>
               <PengambilanObatPage />
             </Layout>
