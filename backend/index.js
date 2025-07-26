@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const auth = require('./routes/auth');
+const options = require('./routes/options');
 
 const pasien = require('./routes/pasien');
 const pendaftaran = require('./routes/pendaftaran');
@@ -26,6 +27,7 @@ app.use(
 app.use(bodyParser.json());
 
 app.use('/api', auth);
+app.use('/api', options);
 
 app.use('/api', pasien);
 app.use('/api', pendaftaran);

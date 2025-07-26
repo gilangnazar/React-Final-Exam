@@ -4,6 +4,7 @@ exports.getAllDoctors = async (req, res) => {
   try {
     const query = `SELECT 
   d.doctor_id,
+  d.department_id,
   u.user_id,
   u.full_name AS doctor_name,
   d.specialization,
