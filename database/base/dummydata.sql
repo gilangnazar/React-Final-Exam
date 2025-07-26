@@ -1,11 +1,11 @@
 
 INSERT INTO roles (role_id, role_name) VALUES
-(1, 'pasien'),
-(2, 'pendaftaran'),
-(3, 'dokter'),
-(4, 'kasir'),
-(5, 'apoteker'),
-(6, 'admin');
+(1, 'admin'),
+(2, 'dokter'),
+(3, 'pasien'),
+(4, 'apoteker'),
+(5, 'kasir'),
+(6, 'pendaftaran');
 
 
 INSERT INTO departments (department_id, name, description) VALUES
@@ -26,12 +26,12 @@ INSERT INTO medicines (medicine_id, name, stock, price) VALUES
 
 -- GANTI PASSWORD DENGAN HASH (password123): $2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO
 INSERT INTO users (user_id, username, password_hash, full_name, role_id) VALUES
-(1, 'pasien01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Ahmad Ridwan', 1),
-(2, 'pendaftaran01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Siti Maesaroh', 2),
-(3, 'dokter01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Dr. Budi Santoso', 3),
-(4, 'kasir01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Dewi Kartika', 4),
-(5, 'apoteker01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Agus Pranowo', 5),
-(6, 'admin01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Lina Wahyuni', 6);
+(1, 'pasien01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Ahmad Ridwan', 3),
+(2, 'pendaftaran01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Siti Maesaroh', 6),
+(3, 'dokter01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Dr. Budi Santoso', 2),
+(4, 'kasir01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Dewi Kartika', 5),
+(5, 'apoteker01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Agus Pranowo', 3),
+(6, 'admin01', '$2b$10$Ubh4XBOyMmY6cfbMVIDM2.liJz.3DIluAlj9ZI6tJD47N4jLW9LKO', 'Lina Wahyuni', 1);
 
 INSERT INTO patients (patient_id, user_id, nik, gender, birth_date, phone, address) VALUES
 (1, 1, '3271012300010001', 'L', '1990-05-14', '081234567890', 'Jl. Merdeka No. 10, Bandung');
