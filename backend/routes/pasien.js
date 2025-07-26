@@ -10,6 +10,8 @@ const router = express.Router();
 router.post('/pasien/:user_id/appointments', appointmentsController.createAppointment);
 router.get('/pasien/:user_id/appointments', appointmentsController.fetchAppointment);
 
+// router.get('/pasien/:user_id/antrian', );
+
 router.get('/pasien/:user_id/dashboard', async (req, res) => {
   const { user_id } = req.params;
 

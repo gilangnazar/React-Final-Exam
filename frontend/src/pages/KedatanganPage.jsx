@@ -83,7 +83,7 @@ const PendaftaranPage = () => {
               <td>{renderStatus(appt.status)}</td>
               <td>
                 <button
-                  className='btn btn-warning small'
+                  className='btn btn-primary small'
                   onClick={() => handleChangeStatus(appt.appointment_id)}>
                   Confirm
                 </button>
