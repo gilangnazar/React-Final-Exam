@@ -1,29 +1,44 @@
-import React, { useState } from "react";
-import { Table, Button, Modal, Form } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useEffect, useState } from 'react';
+import { Table, Button, Modal, Form } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const dummyPayments = [
-  {
-    payment_id: 1,
-    appointment_id: 2,
-    total_amount: 35000.0,
-    payment_method: "cash",
-    payment_status: "paid",
-    payment_date: "2025-07-09 09:30:00",
-  },
-];
+import { getPaymentsData, markPaymentAsPaid } from '../services/kasirService';
 
 const PembayaranPage = () => {
-  const [data, setData] = useState(dummyPayments);
+  const [data, setData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
   const [form, setForm] = useState({
-    appointment_id: "",
-    total_amount: "",
-    payment_method: "",
-    payment_status: "",
-    payment_date: "",
+    appointment_id: '',
+    total_amount: '',
+    payment_method: '',
+    payment_status: '',
+    payment_date: '',
   });
+
+  const fetchData = async () => {
+    try {
+      const response = await getPaymentsData();
+      setData(response.data);
+    } catch (error) {
+      console.error('Error fetching pembayaran data:', error);
+    }
+  };
+
+  const handlePaid = async (payment_id) => {
+    try {
+      await markPaymentAsPaid(payment_id);
+      fetchData();
+    } catch (error) {
+      console.error('Error marking payment as paid:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log('data:', data);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -36,7 +51,7 @@ const PembayaranPage = () => {
   };
 
   const handleDelete = (index) => {
-    if (window.confirm("Yakin ingin menghapus data pembayaran ini?")) {
+    if (window.confirm('Yakin ingin menghapus data pembayaran ini?')) {
       const newData = [...data];
       newData.splice(index, 1);
       setData(newData);
@@ -53,14 +68,15 @@ const PembayaranPage = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className='container mt-4'>
       <h3>Manajemen Pembayaran</h3>
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Payment ID</th>
-            <th>Appointment ID</th>
-            <th>Total Amount</th>
+            <th>No</th>
+            <th>Nama Pasien</th>
+            <th>Tanggal Pemeriksaan</th>
+            <th>Total Tagihan</th>
             <th>Payment Method</th>
             <th>Payment Status</th>
             <th>Payment Date</th>
@@ -70,27 +86,20 @@ const PembayaranPage = () => {
         <tbody>
           {data.map((payment, index) => (
             <tr key={payment.payment_id}>
-              <td>{payment.payment_id}</td>
-              <td>{payment.appointment_id}</td>
+              <td>{index + 1}</td>
+              <td>{payment.full_name}</td>
+              <td>{new Date(payment.schedule_date).toLocaleDateString('id-ID')}</td>
               <td>{payment.total_amount}</td>
               <td>{payment.payment_method}</td>
               <td>{payment.payment_status}</td>
               <td>{payment.payment_date}</td>
               <td>
                 <Button
-                  variant="warning"
-                  size="sm"
-                  onClick={() => handleEdit(index)}
-                  className="me-2"
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleDelete(index)}
-                >
-                  Hapus
+                  variant='success'
+                  size='sm'
+                  onClick={() => handlePaid(payment.payment_id)}
+                  className='me-2'>
+                  Bayar
                 </Button>
               </td>
             </tr>
@@ -104,24 +113,26 @@ const PembayaranPage = () => {
         </Modal.Header>
         <Modal.Body>
           <Form>
-            {["appointment_id", "total_amount", "payment_method", "payment_status", "payment_date"].map((field) => (
-              <Form.Group key={field} className="mb-3">
-                <Form.Label>{field.replace(/_/g, " ").toUpperCase()}</Form.Label>
-                <Form.Control
-                  type={field === "total_amount" ? "number" : "text"}
-                  name={field}
-                  value={form[field]}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            ))}
+            {['appointment_id', 'total_amount', 'payment_method', 'payment_status', 'payment_date'].map(
+              (field) => (
+                <Form.Group key={field} className='mb-3'>
+                  <Form.Label>{field.replace(/_/g, ' ').toUpperCase()}</Form.Label>
+                  <Form.Control
+                    type={field === 'total_amount' ? 'number' : 'text'}
+                    name={field}
+                    value={form[field]}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              )
+            )}
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button variant='secondary' onClick={() => setShowModal(false)}>
             Batal
           </Button>
-          <Button variant="success" onClick={handleSave}>
+          <Button variant='success' onClick={handleSave}>
             Simpan
           </Button>
         </Modal.Footer>
