@@ -26,6 +26,12 @@ const Sidebar = () => {
       roles: [3],
     },
     {
+      label: 'ambilobat',
+      path: '/ambilobat',
+      icon: <GiArchiveRegister />,
+      roles: [3],
+    },
+    {
       label: 'Kedatangan',
       path: '/kedatangan',
       icon: <FaUserCheck />,

@@ -12,7 +12,8 @@ exports.fetchPrescriptions = async (req, res) => {
   u.full_name AS patient_name,
   mp.pickup_date,
   mp.picked_by,
-  mp.pickup_id
+  mp.pickup_id,
+  pay.payment_status
 FROM prescriptions p
 JOIN prescription_items i ON i.prescription_id = p.prescription_id
 JOIN medicines m ON m.medicine_id = i.medicine_id
@@ -32,7 +33,8 @@ ORDER BY p.prescription_id DESC;
     const grouped = {};
 
     rows.forEach((row) => {
-      const { prescription_id, pickup_id, pickup_date, picked_by, patient_name, ...item } = row;
+      const { prescription_id, payment_status, pickup_id, pickup_date, picked_by, patient_name, ...item } =
+        row;
 
       if (!grouped[prescription_id]) {
         grouped[prescription_id] = {
@@ -41,6 +43,7 @@ ORDER BY p.prescription_id DESC;
           patient_name,
           pickup_date,
           picked_by,
+          payment_status,
           items: [],
         };
       }

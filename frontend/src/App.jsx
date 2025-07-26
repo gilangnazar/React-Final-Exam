@@ -20,6 +20,7 @@ import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import ManajemenObat from './pages/ManajemenObat';
 import ResepObatPage from './pages/ResepObatPage';
+import AmbilObatPage from './pages/AmbilObatPage';
 
 export default function App() {
   return (
@@ -164,6 +165,16 @@ export default function App() {
           <PrivateRoute allowedRoles={[1]}>
             <Layout>
               <ManajemenObat />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path='/ambilobat'
+        element={
+          <PrivateRoute allowedRoles={[3]}>
+            <Layout>
+              <AmbilObatPage />
             </Layout>
           </PrivateRoute>
         }
