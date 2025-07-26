@@ -1,5 +1,3 @@
-// src/components/Sidebar.jsx
-import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { FaHospital, FaListOl, FaStethoscope, FaMoneyBill, FaPills } from 'react-icons/fa';
@@ -13,12 +11,21 @@ const Sidebar = () => {
   const role = parseInt(localStorage.getItem('userRole'));
 
   const menu = [
+    // dokter : 2
     {
-      label: 'Dashboard',
-      path: '/dashboard',
-      icon: <FaChartLine />,
-      roles: [1, 3, 4, 5, 6],
+      label: 'Pemeriksaan',
+      path: '/pemeriksaan',
+      icon: <FaStethoscope />,
+      roles: [2],
     },
+    {
+      label: 'resepobat',
+      path: '/resepobat',
+      icon: <FaListOl />,
+      roles: [2],
+    },
+
+    // pasien : 3
     {
       label: 'Pendaftaran',
       path: '/pendaftaran',
@@ -31,36 +38,20 @@ const Sidebar = () => {
       icon: <GiArchiveRegister />,
       roles: [3],
     },
-    {
-      label: 'Kedatangan',
-      path: '/kedatangan',
-      icon: <FaUserCheck />,
-      roles: [6],
-    },
-    {
-      label: 'Doctors',
-      path: '/doctors',
-      icon: <FaUserDoctor />,
-      roles: [1, 2],
-    },
-    {
-      label: 'Departments',
-      path: '/departments',
-      icon: <BsBuildingsFill />,
-      roles: [1, 2],
-    },
 
+    // apoteker : 4
     {
-      label: 'Pemeriksaan',
-      path: '/pemeriksaan',
-      icon: <FaStethoscope />,
-      roles: [2],
+      label: 'Pengambilan Obat',
+      path: '/pengambilan-obat',
+      icon: <FaPills />,
+      roles: [4],
     },
+    // kasir : 5
     {
-      label: 'resepobat',
-      path: '/resepobat',
-      icon: <FaListOl />,
-      roles: [1, 2],
+      label: 'Pembayaran Pasien',
+      path: '/Pembayaran-Pasien',
+      icon: <TbCashRegister />,
+      roles: [5],
     },
     {
       label: 'Pembayaran',
@@ -68,12 +59,34 @@ const Sidebar = () => {
       icon: <FaMoneyBill />,
       roles: [5],
     },
+
+    // pendaftaran : 6
     {
-      label: 'Pengambilan Obat',
-      path: '/pengambilan-obat',
-      icon: <FaPills />,
-      roles: [4],
+      label: 'Kedatangan',
+      path: '/kedatangan',
+      icon: <FaUserCheck />,
+      roles: [6],
     },
+    {
+      label: 'Dashboard',
+      path: '/dashboard',
+      icon: <FaChartLine />,
+      roles: [1],
+    },
+
+    {
+      label: 'Doctors',
+      path: '/doctors',
+      icon: <FaUserDoctor />,
+      roles: [1],
+    },
+    {
+      label: 'Departments',
+      path: '/departments',
+      icon: <BsBuildingsFill />,
+      roles: [1],
+    },
+
     {
       label: 'Manajemen User',
       path: '/manajemen-user',
@@ -86,12 +99,7 @@ const Sidebar = () => {
       icon: <FaUsersGear />,
       roles: [1],
     },
-    {
-      label: 'Pembayaran Pasien',
-      path: '/Pembayaran-Pasien',
-      icon: <TbCashRegister />,
-      roles: [5],
-    },
+
     {
       label: 'Manajemen Obat',
       path: '/Manajemen-Obat',
