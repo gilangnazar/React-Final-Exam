@@ -5,7 +5,7 @@ import { FaUserClock } from 'react-icons/fa6';
 import { BiSolidUserDetail } from 'react-icons/bi';
 import { jwtDecode } from 'jwt-decode';
 
-import { getDoctors, createAppointment } from '../services/pasienService';
+import { getDoctors, createAppointment, getPatientAppointments } from '../services/pasienService';
 
 const PendaftaranPage = () => {
   const token = jwtDecode(localStorage.getItem('token'));
@@ -34,9 +34,21 @@ const PendaftaranPage = () => {
       console.error('Error fetching doctors:', error);
     }
   };
+
+  const fetchAppointments = async (user_id) => {
+    try {
+      const result = await getPatientAppointments(user_id);
+      setAppointments(result.data);
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+    }
+  };
   useEffect(() => {
     fetchDoctors();
+    fetchAppointments(user_id);
   }, []);
+
+  console.log('Appointments:', appointments);
 
   const renderStatus = (status) => {
     switch (status) {
@@ -113,6 +125,7 @@ const PendaftaranPage = () => {
             <th>Schedule Date</th>
             <th>Department</th>
             <th>Doctor</th>
+            <th>Specialization</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -121,8 +134,9 @@ const PendaftaranPage = () => {
             <tr key={appt.appointment_id}>
               <td>{appt.appointment_id}</td>
               <td>{appt.schedule_date}</td>
-              <td>{appt.department_id}</td>
-              <td>{appt.doctor_id}</td>
+              <td>{appt.department_name}</td>
+              <td>{appt.doctor_name}</td>
+              <td>{appt.specialization}</td>
               <td>{renderStatus(appt.status)}</td>
             </tr>
           ))}

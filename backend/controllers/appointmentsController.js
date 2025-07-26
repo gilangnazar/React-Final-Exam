@@ -88,7 +88,27 @@ exports.fetchAppointment = async (req, res) => {
 
     const patient_id = await getPatientId(user_id);
 
-    const [rows] = await db.execute('SELECT * FROM appointments WHERE patient_id = ?', [patient_id]);
+    const query = `SELECT 
+  a.appointment_id,
+  a.patient_id,
+  a.schedule_date,
+  a.status,
+  
+  d.doctor_id,
+  d.specialization,
+  u.full_name AS doctor_name,
+  
+  dept.department_id,
+  dept.name AS department_name
+
+FROM appointments a
+JOIN doctors d ON d.doctor_id = a.doctor_id
+JOIN users u ON u.user_id = d.user_id
+JOIN departments dept ON dept.department_id = d.department_id
+
+WHERE a.patient_id = ? AND a.deleted_at IS NULL
+ORDER BY a.schedule_date DESC;`;
+    const [rows] = await db.execute(query, [patient_id]);
 
     return res.status(200).json({ msg: 'Data daftar online pasien', data: rows });
   } catch (error) {

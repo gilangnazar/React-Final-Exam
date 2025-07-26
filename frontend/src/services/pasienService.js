@@ -32,9 +32,9 @@ export const createAppointment = async (appointmentData, user_id) => {
   }
 };
 
-export const getPatientAppointments = async (patient_id) => {
+export const getPatientAppointments = async (user_id) => {
   try {
-    const response = await axios.get(`${API_URL}/pasien/${patient_id}/appointments`);
+    const response = await axios.get(`${API_URL}/pasien/${user_id}/appointments`);
     return response.data;
   } catch (error) {
     console.error('Error fetching pasien appointments:', error);
