@@ -5,6 +5,7 @@ import {
   dokterCreateExamination,
   getMedicines,
   dokterCreatePrescription,
+  dokterCompleteAppointment,
 } from '../services/dokterService';
 import { jwtDecode } from 'jwt-decode';
 
@@ -74,6 +75,15 @@ const ResepObatPage = () => {
     setShowPrescriptionModal(true);
   };
 
+  const handleComplete = async (appointment_id) => {
+    try {
+      await dokterCompleteAppointment(appointment_id);
+      await getExaminations(user_id);
+    } catch (error) {
+      console.error('Error completing appointment:', error);
+    }
+  };
+
   return (
     <div className='container mt-4'>
       <div className='d-flex justify-content-between align-items-center mb-3'>
@@ -109,7 +119,11 @@ const ResepObatPage = () => {
                   onClick={() => handleOpenPrescription(p, p.exam_id)}>
                   Tambah Resep
                 </Button>
-                <Button variant='success' size='sm'>
+                <Button
+                  onClick={() => handleComplete(p.appointment_id)}
+                  variant='success'
+                  size='sm'
+                  disabled={p.appointment_status === 'completed'}>
                   Selesai
                 </Button>
               </td>

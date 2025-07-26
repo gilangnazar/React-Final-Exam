@@ -51,3 +51,13 @@ export const dokterCreatePrescription = async (prescriptionData) => {
     throw error;
   }
 };
+
+export const dokterCompleteAppointment = async (appointment_id) => {
+  try {
+    const response = await axios.put(`${API_URL}/doctors/appointments/${appointment_id}/completed`);
+    return response.data;
+  } catch (error) {
+    console.error('Error completing appointment:', error);
+    throw error;
+  }
+};
