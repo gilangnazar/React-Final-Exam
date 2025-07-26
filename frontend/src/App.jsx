@@ -1,34 +1,34 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import Layout from "./components/Layout";
-import PrivateRoute from "./components/PrivateRoute";
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './components/Layout';
+import PrivateRoute from './components/PrivateRoute';
 
 // Pages
-import DashboardPage from "./pages/DashboardPage";
-import PendaftaranPage from "./pages/PendaftaranPage";
-import Doctors from "./pages/Doctors";
-import Departments from "./pages/Departments";
-import KedatanganPage from "./pages/KedatanganPage";
-import AntrianPage from "./pages/AntrianPage";
-import PembayaranPasien from "./pages/PembayaranPasien";
-import PemeriksaanPage from "./pages/PemeriksaanPage";
-import PembayaranPage from "./pages/PembayaranPage";
-import PengambilanObatPage from "./pages/PengambilanObatPage";
-import ManajemenUserPage from "./pages/ManajemenUserPage";
-import ManajemenRoles from "./pages/ManajemenRoles";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import ProfilePage from "./pages/ProfilePage";
-import ManajemenObat from "./pages/ManajemenObat";
+import DashboardPage from './pages/DashboardPage';
+import PendaftaranPage from './pages/PendaftaranPage';
+import Doctors from './pages/Doctors';
+import Departments from './pages/Departments';
+import KedatanganPage from './pages/KedatanganPage';
+import PembayaranPasien from './pages/PembayaranPasien';
+import PemeriksaanPage from './pages/PemeriksaanPage';
+import PembayaranPage from './pages/PembayaranPage';
+import PengambilanObatPage from './pages/PengambilanObatPage';
+import ManajemenUserPage from './pages/ManajemenUserPage';
+import ManajemenRoles from './pages/ManajemenRoles';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ProfilePage from './pages/ProfilePage';
+import ManajemenObat from './pages/ManajemenObat';
+import ResepObatPage from './pages/ResepObatPage';
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route path='/' element={<LoginPage />} />
+      <Route path='/register' element={<RegisterPage />} />
 
       <Route
-        path="/dashboard"
+        path='/dashboard'
         element={
           <PrivateRoute allowedRoles={[1, 3, 4, 5, 6]}>
             <Layout>
@@ -38,18 +38,18 @@ export default function App() {
         }
       />
       <Route
-  path="/profil"
-  element={
-    <PrivateRoute allowedRoles={[3]}>
-      <Layout>
-        <ProfilePage />
-      </Layout>
-    </PrivateRoute>
-  }
-/>
+        path='/profil'
+        element={
+          <PrivateRoute allowedRoles={[3]}>
+            <Layout>
+              <ProfilePage />
+            </Layout>
+          </PrivateRoute>
+        }
+      />
 
       <Route
-        path="/pendaftaran"
+        path='/pendaftaran'
         element={
           <PrivateRoute allowedRoles={[3]}>
             <Layout>
@@ -59,7 +59,7 @@ export default function App() {
         }
       />
       <Route
-        path="/doctors"
+        path='/doctors'
         element={
           <PrivateRoute allowedRoles={[1, 2]}>
             <Layout>
@@ -69,7 +69,7 @@ export default function App() {
         }
       />
       <Route
-        path="/departments"
+        path='/departments'
         element={
           <PrivateRoute allowedRoles={[1, 2]}>
             <Layout>
@@ -79,7 +79,7 @@ export default function App() {
         }
       />
       <Route
-        path="/kedatangan"
+        path='/kedatangan'
         element={
           <PrivateRoute allowedRoles={[6]}>
             <Layout>
@@ -88,18 +88,18 @@ export default function App() {
           </PrivateRoute>
         }
       />
-      {/* <Route
-        path="/antrian"
+      <Route
+        path='/resepobat'
         element={
-          <PrivateRoute allowedRoles={[1]}>
+          <PrivateRoute allowedRoles={[1, 2]}>
             <Layout>
-              <AntrianPage />
+              <ResepObatPage />
             </Layout>
           </PrivateRoute>
         }
-      /> */}
+      />
       <Route
-        path="/pembayaran-pasien"
+        path='/pembayaran-pasien'
         element={
           <PrivateRoute allowedRoles={[5]}>
             <Layout>
@@ -109,7 +109,7 @@ export default function App() {
         }
       />
       <Route
-        path="/pemeriksaan"
+        path='/pemeriksaan'
         element={
           <PrivateRoute allowedRoles={[2]}>
             <Layout>
@@ -119,7 +119,7 @@ export default function App() {
         }
       />
       <Route
-        path="/pembayaran"
+        path='/pembayaran'
         element={
           <PrivateRoute allowedRoles={[5]}>
             <Layout>
@@ -129,7 +129,7 @@ export default function App() {
         }
       />
       <Route
-        path="/pengambilan-obat"
+        path='/pengambilan-obat'
         element={
           <PrivateRoute allowedRoles={[4]}>
             <Layout>
@@ -139,7 +139,7 @@ export default function App() {
         }
       />
       <Route
-        path="/manajemen-user"
+        path='/manajemen-user'
         element={
           <PrivateRoute allowedRoles={[1]}>
             <Layout>
@@ -149,7 +149,7 @@ export default function App() {
         }
       />
       <Route
-        path="/manajemen-roles"
+        path='/manajemen-roles'
         element={
           <PrivateRoute allowedRoles={[1]}>
             <Layout>
@@ -159,7 +159,7 @@ export default function App() {
         }
       />
       <Route
-        path="/manajemen-obat"
+        path='/manajemen-obat'
         element={
           <PrivateRoute allowedRoles={[1]}>
             <Layout>
@@ -169,7 +169,7 @@ export default function App() {
         }
       />
 
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path='*' element={<Navigate to='/' />} />
     </Routes>
   );
 }

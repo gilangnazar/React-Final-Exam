@@ -1,6 +1,40 @@
 const db = require('../db');
 const { getDoctorId } = require('../utils/userRoles');
 
+exports.getExaminations = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const doctor_id = await getDoctorId(user_id);
+    if (!doctor_id) return res.status(400).json({ msg: 'Invalid Doctor Id' });
+
+    const query = `
+      SELECT 
+    e.exam_id,
+    e.appointment_id,
+    e.complaint,
+    e.diagnosis,
+    e.notes,
+    a.patient_id,
+    u.full_name AS patient_name,
+    a.status AS appointment_status
+FROM examinations e
+JOIN appointments a ON e.appointment_id = a.appointment_id
+JOIN users u ON a.patient_id = u.user_id
+WHERE a.doctor_id = ?
+    `;
+
+    const [rows] = await db.execute(query, [doctor_id]);
+
+    return res.status(200).json({
+      msg: 'Data pemeriksaan berhasil diambil',
+      data: rows,
+    });
+  } catch (error) {
+    console.error('Error fetching examinations:', error);
+    return res.status(500).json({ message: 'Gagal mengambil data pemeriksaan' });
+  }
+};
+
 exports.createExamination = async (req, res) => {
   try {
     const { user_id } = req.params;

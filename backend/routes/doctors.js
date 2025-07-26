@@ -7,6 +7,7 @@ const prescriptionsController = require('../controllers/prescriptionsController'
 const router = express.Router();
 
 router.get('/doctors/:user_id/appointments', appointmentsController.doctorFetchAppointments);
+router.get('/doctors/:user_id/examinations', examinationsController.getExaminations);
 router.post('/doctors/:user_id/examinations', examinationsController.createExamination);
 router.post('/doctors/prescriptions', prescriptionsController.createPrescription);
 router.put(
