@@ -54,12 +54,12 @@ const Sidebar = () => {
       icon: <BsBuildingsFill />,
       roles: [1, 2],
     },
-    {
-      label: "Antrian",
-      path: "/antrian",
-      icon: <FaListOl />,
-      roles: [1],
-    },
+    // {
+    //   label: "Antrian",
+    //   path: "/antrian",
+    //   icon: <FaListOl />,
+    //   roles: [1],
+    // },
     {
       label: "Pemeriksaan",
       path: "/pemeriksaan",

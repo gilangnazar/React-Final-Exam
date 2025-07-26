@@ -88,7 +88,7 @@ export default function App() {
           </PrivateRoute>
         }
       />
-      <Route
+      {/* <Route
         path="/antrian"
         element={
           <PrivateRoute allowedRoles={[1]}>
@@ -97,7 +97,7 @@ export default function App() {
             </Layout>
           </PrivateRoute>
         }
-      />
+      /> */}
       <Route
         path="/pembayaran-pasien"
         element={
