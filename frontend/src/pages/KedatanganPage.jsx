@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Badge, Button, Modal, Form } from 'react-bootstrap';
 
-import { pendaftaranGetAppointments } from '../services/pendaftaranService';
+import { pendaftaranGetAppointments, pendaftaranConfirmed } from '../services/pendaftaranService';
 
 const PendaftaranPage = () => {
   const [appointments, setAppointments] = useState([]);
-  const [showModal, setShowModal] = useState(false);
 
   const [formData, setFormData] = useState({
     patient_id: '',
@@ -47,42 +46,27 @@ const PendaftaranPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newAppointment = {
-      appointment_id: appointments.length + 1,
-      patient_id: formData.patient_id,
-      schedule_date: formData.schedule_date,
-      department_id: formData.department_id,
-      doctor_id: formData.doctor_id,
-      status: formData.status,
-      created_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
-    };
-    setAppointments([...appointments, newAppointment]);
-    setShowModal(false); // Tutup modal
-    setFormData({
-      patient_id: '',
-      schedule_date: '',
-      department_id: '',
-      doctor_id: '',
-      status: 'waiting',
-    });
+  const handleChangeStatus = async (appointment_id) => {
+    try {
+      console.log('selected appt:', appointment_id);
+      await pendaftaranConfirmed(appointment_id);
+      getAppointments();
+    } catch (error) {
+      console.error('Error confirming appointment:', error);
+    }
   };
 
   return (
     <div>
       <div className='d-flex justify-content-between align-items-center mb-3'>
         <h3>Data Pendaftaran Online Pasien</h3>
-        <Button variant='primary' onClick={() => setShowModal(true)}>
-          Registrasi
-        </Button>
       </div>
 
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>No</th>
-            <th>Patient ID</th>
+            <th>Patient Name</th>
             <th>Schedule Date</th>
             <th>Department</th>
             <th>Status</th>
@@ -98,79 +82,16 @@ const PendaftaranPage = () => {
               <td>{appt.department_name}</td>
               <td>{renderStatus(appt.status)}</td>
               <td>
-                <button className='btn btn-warning small'>Confirm</button>
+                <button
+                  className='btn btn-warning small'
+                  onClick={() => handleChangeStatus(appt.appointment_id)}>
+                  Confirm
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
-
-      {/* MODAL TAMBAH DATA */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Tambah Pendaftaran</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className='mb-2'>
-              <Form.Label>Patient ID</Form.Label>
-              <Form.Control
-                type='number'
-                name='patient_id'
-                value={formData.patient_id}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className='mb-2'>
-              <Form.Label>Schedule Date</Form.Label>
-              <Form.Control
-                type='date'
-                name='schedule_date'
-                value={formData.schedule_date}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className='mb-2'>
-              <Form.Label>Department ID</Form.Label>
-              <Form.Control
-                type='number'
-                name='department_id'
-                value={formData.department_id}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className='mb-2'>
-              <Form.Label>Doctor ID</Form.Label>
-              <Form.Control
-                type='number'
-                name='doctor_id'
-                value={formData.doctor_id}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className='mb-3'>
-              <Form.Label>Status</Form.Label>
-              <Form.Select name='status' value={formData.status} onChange={handleChange}>
-                <option value='waiting'>Waiting</option>
-                <option value='confirmed'>Confirmed</option>
-                <option value='cancelled'>Cancelled</option>
-              </Form.Select>
-            </Form.Group>
-
-            <Button type='submit' variant='success' className='w-100'>
-              Simpan
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
     </div>
   );
 };

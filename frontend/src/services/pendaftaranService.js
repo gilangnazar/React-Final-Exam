@@ -11,3 +11,13 @@ export const pendaftaranGetAppointments = async () => {
     throw error;
   }
 };
+
+export const pendaftaranConfirmed = async (appointment_id) => {
+  try {
+    const response = await axios.put(`${API_URL}/pendaftaran/appointments/${appointment_id}/confirmed`);
+    return response.data;
+  } catch (error) {
+    console.error('Error confirming appointment:', error);
+    throw error;
+  }
+};
