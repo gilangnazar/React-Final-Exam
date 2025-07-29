@@ -57,7 +57,7 @@ const Sidebar = () => {
       label: 'Pembayaran',
       path: '/pembayaran',
       icon: <FaMoneyBill />,
-      roles: [5],
+      roles: [],
     },
 
     // pendaftaran : 6

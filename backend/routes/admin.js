@@ -7,8 +7,11 @@ const patientsController = require('../controllers/patientsController');
 const appointmentsController = require('../controllers/appointmentsController');
 const doctorsController = require('../controllers/doctorsController');
 const queuesController = require('../controllers/queuesController');
+const adminController = require('../controllers/adminController');
 
 const router = express.Router();
+
+router.get('/admin/dashboard', adminController.getDashboardData);
 
 // Medicines
 router.get('/admin/medicines', medicinesController.getMedicines);

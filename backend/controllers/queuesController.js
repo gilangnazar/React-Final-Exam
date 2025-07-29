@@ -35,3 +35,40 @@ ORDER BY q.queue_number ASC`;
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+exports.getAntrianPasienByUserId = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const query = `SELECT
+  (
+    SELECT q1.queue_number
+    FROM queues q1
+    WHERE q1.status = 'calling'
+      AND q1.deleted_at IS NULL
+    ORDER BY q1.call_time ASC
+    LIMIT 1
+  ) AS antriansekarang,
+
+  (
+    SELECT q2.queue_number
+    FROM queues q2
+    JOIN appointments a ON q2.appointment_id = a.appointment_id
+    JOIN patients p ON a.patient_id = p.patient_id
+    WHERE p.user_id = ?
+      AND q2.status IN ('waiting', 'calling')
+      AND q2.deleted_at IS NULL
+    ORDER BY q2.created_at DESC
+    LIMIT 1
+  ) AS antriansaya;`;
+
+    const [queue] = await db.execute(query, [user_id]);
+
+    res.status(200).json({
+      message: 'Queue information fetched successfully',
+      data: queue[0] || { antriansekarang: null, antriansaya: null },
+    });
+  } catch (error) {
+    console.error('Error fetching patient queue:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};

@@ -3,12 +3,14 @@ const bcrypt = require('bcrypt');
 
 const db = require('../db');
 const appointmentsController = require('../controllers/appointmentsController');
+const queuesController = require('../controllers/queuesController');
 
 const router = express.Router();
 
 /* PASIEN DAFTARONLINE */
 router.post('/pasien/:user_id/appointments', appointmentsController.createAppointment);
 router.get('/pasien/:user_id/appointments', appointmentsController.fetchAppointment);
+router.get('/pasien/:user_id/antrian', queuesController.getAntrianPasienByUserId);
 
 // router.get('/pasien/:user_id/antrian', );
 

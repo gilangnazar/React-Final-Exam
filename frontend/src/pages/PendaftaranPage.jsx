@@ -5,19 +5,15 @@ import { FaUserClock } from 'react-icons/fa6';
 import { BiSolidUserDetail } from 'react-icons/bi';
 import { jwtDecode } from 'jwt-decode';
 
-import { getDoctors, createAppointment, getPatientAppointments } from '../services/pasienService';
+import { getDoctors, createAppointment, getPatientAppointments, getAntrian } from '../services/pasienService';
 
 const PendaftaranPage = () => {
   const token = jwtDecode(localStorage.getItem('token'));
   const user_id = token.user_id;
 
-  const summaryData = [
-    { title: ' Nomor Antrian Anda', count: 10, icon: <FaUserClock size={30} /> },
-    { title: 'Nomor Antrian Sekarang', count: 5, icon: <BiSolidUserDetail size={30} /> },
-  ];
-
   const [appointments, setAppointments] = useState([]);
   const [doctors, setDoctors] = useState([]);
+  const [antrian, setAntrian] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     schedule_date: '',
@@ -25,6 +21,15 @@ const PendaftaranPage = () => {
     department_name: '',
     doctor_id: '',
   });
+
+  const summaryData = [
+    { title: ' Nomor Antrian Anda', count: antrian.antriansaya, icon: <FaUserClock size={30} /> },
+    {
+      title: 'Nomor Antrian Sekarang',
+      count: antrian.antriansekarang,
+      icon: <BiSolidUserDetail size={30} />,
+    },
+  ];
 
   const fetchDoctors = async () => {
     try {
@@ -43,12 +48,23 @@ const PendaftaranPage = () => {
       console.error('Error fetching appointments:', error);
     }
   };
+
+  const fetchAntrian = async (user_id) => {
+    try {
+      const result = await getAntrian(user_id);
+      setAntrian(result.data);
+    } catch (error) {
+      console.error('Error fetching Antrian:', error);
+    }
+  };
+
   useEffect(() => {
     fetchDoctors();
     fetchAppointments(user_id);
+    fetchAntrian(user_id);
   }, []);
 
-  console.log('Appointments:', appointments);
+  console.log('antrian:', antrian);
 
   const renderStatus = (status) => {
     switch (status) {
@@ -90,6 +106,7 @@ const PendaftaranPage = () => {
       doctor_id: '',
       status: 'waiting',
     });
+    fetchAppointments(user_id);
   };
 
   return (

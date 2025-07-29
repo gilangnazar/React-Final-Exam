@@ -41,3 +41,12 @@ export const getPatientAppointments = async (user_id) => {
     throw error;
   }
 };
+export const getAntrian = async (user_id) => {
+  try {
+    const response = await axios.get(`${API_URL}/pasien/${user_id}/antrian`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching pasien Antrian:', error);
+    throw error;
+  }
+};

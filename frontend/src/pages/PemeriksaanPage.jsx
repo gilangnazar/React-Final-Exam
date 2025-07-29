@@ -99,13 +99,6 @@ const PemeriksaanPage = () => {
                 <Button variant='info' size='sm' className='me-2' onClick={() => handleOpenExamination(p)}>
                   Isi Pemeriksaan
                 </Button>
-                <Button
-                  variant='warning'
-                  size='sm'
-                  className='me-2'
-                  onClick={() => handleOpenPrescription(p)}>
-                  Tambah Resep
-                </Button>
                 <Button variant='success' size='sm'>
                   Selesai
                 </Button>
@@ -170,75 +163,6 @@ const PemeriksaanPage = () => {
               onClick={() => setShowExaminationModal(false)}
               className='w-100'>
               Simpan Pemeriksaan
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-
-      {/* Modal Tambah Resep */}
-      <Modal show={showPrescriptionModal} onHide={() => setShowPrescriptionModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Tambah Resep</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className='mb-3'>
-              <Form.Label>Nama Obat</Form.Label>
-              <Form.Control
-                type='text'
-                value={prescriptionForm.nama_obat}
-                onChange={(e) =>
-                  setPrescriptionForm({
-                    ...prescriptionForm,
-                    nama_obat: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Row>
-              <Form.Group as={Col} md='6' className='mb-3'>
-                <Form.Label>Dosis</Form.Label>
-                <Form.Control
-                  type='text'
-                  value={prescriptionForm.dosis}
-                  onChange={(e) =>
-                    setPrescriptionForm({
-                      ...prescriptionForm,
-                      dosis: e.target.value,
-                    })
-                  }
-                />
-              </Form.Group>
-              <Form.Group as={Col} md='6' className='mb-3'>
-                <Form.Label>Quantity</Form.Label>
-                <Form.Control
-                  type='number'
-                  min={1}
-                  value={prescriptionForm.quantity}
-                  onChange={(e) =>
-                    setPrescriptionForm({
-                      ...prescriptionForm,
-                      quantity: e.target.value,
-                    })
-                  }
-                />
-              </Form.Group>
-            </Row>
-            <Form.Group className='mb-3'>
-              <Form.Label>Instruksi</Form.Label>
-              <Form.Control
-                as='textarea'
-                value={prescriptionForm.instruction}
-                onChange={(e) =>
-                  setPrescriptionForm({
-                    ...prescriptionForm,
-                    instruction: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-            <Button variant='success' onClick={() => setShowPrescriptionModal(false)} className='w-100'>
-              Simpan Resep
             </Button>
           </Form>
         </Modal.Body>

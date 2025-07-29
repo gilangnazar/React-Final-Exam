@@ -1,8 +1,8 @@
-import React from "react";
-import { Row, Col, Card } from "react-bootstrap";
-import { FaUserInjured, FaStethoscope } from "react-icons/fa6";
-import { GiPayMoney, GiMedicines } from "react-icons/gi";
-import { Bar, Line, Doughnut, Pie } from "react-chartjs-2";
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Card } from 'react-bootstrap';
+import { FaUserInjured, FaStethoscope } from 'react-icons/fa6';
+import { GiPayMoney, GiMedicines } from 'react-icons/gi';
+import { Bar, Line, Doughnut, Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,7 +13,9 @@ import {
   ArcElement,
   Tooltip,
   Legend,
-} from "chart.js";
+} from 'chart.js';
+
+import { getDashboard } from '../services/adminService';
 
 // Register chart.js components
 ChartJS.register(
@@ -28,21 +30,42 @@ ChartJS.register(
 );
 
 const DashboardPage = () => {
-  const summaryData = [
-    { title: "Pasien Hari Ini", count: 120, icon: <FaUserInjured size={30} /> },
-    { title: "Pemeriksaan", count: 90, icon: <FaStethoscope size={30} /> },
-    { title: "Pembayaran", count: 85, icon: <GiPayMoney size={30} /> },
-    { title: "Obat Diberikan", count: 75, icon: <GiMedicines size={30} /> },
-  ];
+  const [dashboardData, setDashboardData] = useState(null);
+  const fetchData = async () => {
+    try {
+      const data = await getDashboard();
+      setDashboardData(data);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  console.log('Dashboard Data:', dashboardData);
+  if (!dashboardData) {
+    return <div>Loading...</div>;
+  }
+
+  const summaryData = dashboardData.summaryData.map((item, idx) => {
+    const icons = [
+      <FaUserInjured size={30} />,
+      <FaStethoscope size={30} />,
+      <GiPayMoney size={30} />,
+      <GiMedicines size={30} />,
+    ];
+    return { ...item, icon: icons[idx] };
+  });
 
   const lineData = {
-    labels: ["Sen", "Sel", "Rab", "Kam", "Jum"],
+    labels: dashboardData.lineData.labels,
     datasets: [
       {
-        label: "Pasien",
-        data: [20, 35, 50, 30, 55],
-        borderColor: "blue",
-        backgroundColor: "rgba(0,0,255,0.1)",
+        label: 'Pasien',
+        data: dashboardData.lineData.data,
+        borderColor: 'blue',
+        backgroundColor: 'rgba(0,0,255,0.1)',
         tension: 0.3,
         fill: true,
       },
@@ -50,48 +73,52 @@ const DashboardPage = () => {
   };
 
   const barData = {
-    labels: ["Umum", "Gigi", "Anak", "Syaraf"],
+    labels: dashboardData.barData.labels,
     datasets: [
       {
-        label: "Pasien",
-        data: [60, 15, 35, 25],
-        backgroundColor: "green",
+        label: 'Pasien',
+        data: dashboardData.barData.data,
+        backgroundColor: 'green',
       },
     ],
   };
 
   const pieData = {
-    labels: ["Cash", "BPJS", "Asuransi"],
+    labels: dashboardData.pieData.labels,
     datasets: [
       {
-        data: [50, 30, 20],
-        backgroundColor: ["#f1c40f", "#1abc9c", "#8e44ad"],
+        data: dashboardData.pieData.data,
+        backgroundColor: ['#f1c40f', '#1abc9c', '#8e44ad'],
       },
     ],
   };
 
   const doughnutData = {
-    labels: ["Antibiotik", "Vitamin", "Obat Batuk"],
+    labels: dashboardData.doughnutData.labels,
     datasets: [
       {
-        data: [40, 30, 30],
-        backgroundColor: ["#e74c3c", "#f39c12", "#27ae60"],
+        data: dashboardData.doughnutData.data,
+        backgroundColor: ['#e74c3c', '#f39c12', '#27ae60'],
       },
     ],
   };
 
+  console.log('Dashboard Data:', dashboardData);
+  if (!dashboardData) {
+    return <div>Loading...</div>;
+  }
   return (
     <div>
       {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className='d-flex justify-content-between align-items-center mb-3'>
         <h3>Dashboard Admin</h3>
       </div>
 
       {/* Summary Cards */}
-      <Row className="mb-4">
+      <Row className='mb-4'>
         {summaryData.map((card, idx) => (
-          <Col md={3} key={idx} className="mb-3">
-            <Card className="text-center">
+          <Col md={3} key={idx} className='mb-3'>
+            <Card className='text-center'>
               <Card.Body>
                 <div>{card.icon}</div>
                 <Card.Title>{card.title}</Card.Title>
@@ -104,26 +131,26 @@ const DashboardPage = () => {
 
       {/* Charts */}
       <Row>
-        <Col md={6} className="mb-4">
-          <Card className="p-3">
+        <Col md={6} className='mb-4'>
+          <Card className='p-3'>
             <Card.Title>Jumlah Kunjungan per Hari</Card.Title>
             <Line data={lineData} />
           </Card>
         </Col>
-        <Col md={6} className="mb-4">
-          <Card className="p-3">
+        <Col md={6} className='mb-4'>
+          <Card className='p-3'>
             <Card.Title>Poliklinik Terpopuler</Card.Title>
             <Bar data={barData} />
           </Card>
         </Col>
-        <Col md={6} className="mb-4">
-          <Card className="p-3">
+        <Col md={6} className='mb-4'>
+          <Card className='p-3'>
             <Card.Title>Jenis Pembayaran</Card.Title>
             <Pie data={pieData} />
           </Card>
         </Col>
-        <Col md={6} className="mb-4">
-          <Card className="p-3">
+        <Col md={6} className='mb-4'>
+          <Card className='p-3'>
             <Card.Title>Distribusi Resep Obat</Card.Title>
             <Doughnut data={doughnutData} />
           </Card>
@@ -131,10 +158,10 @@ const DashboardPage = () => {
       </Row>
 
       {/* Table */}
-      <Card>
+      {/* <Card>
         <Card.Body>
           <Card.Title>Riwayat Pemeriksaan Hari Ini</Card.Title>
-          <table className="table table-bordered mt-3">
+          <table className='table table-bordered mt-3'>
             <thead>
               <tr>
                 <th>Nama Pasien</th>
@@ -169,7 +196,7 @@ const DashboardPage = () => {
             </tbody>
           </table>
         </Card.Body>
-      </Card>
+      </Card> */}
     </div>
   );
 };

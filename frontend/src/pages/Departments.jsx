@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Table, Button, Modal, Form } from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Table, Button, Modal, Form } from 'react-bootstrap';
 
 export default function Departments() {
   const [departments, setDepartments] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    description: ""
+    name: '',
+    description: '',
   });
   const [editingId, setEditingId] = useState(null);
 
   // Ambil data
   const fetchDepartments = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/admin/departments");
+      const res = await axios.get('http://localhost:4000/api/admin/departments');
       console.log('Data departments:', res.data.data);
       setDepartments(res.data.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -30,7 +30,7 @@ export default function Departments() {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -41,21 +41,18 @@ export default function Departments() {
     try {
       if (editingId) {
         // Edit
-        await axios.put(
-          `http://localhost:4000/api/departments/${editingId}`,
-          formData
-        );
+        await axios.put(`http://localhost:4000/api/admin/departments/${editingId}`, formData);
       } else {
         // Tambah
-        await axios.post("http://localhost:4000/api/departments", formData);
+        await axios.post('http://localhost:4000/api/admin/departments', formData);
       }
 
       fetchDepartments();
       setShowModal(false);
-      setFormData({ name: "", description: "" });
+      setFormData({ name: '', description: '' });
       setEditingId(null);
     } catch (error) {
-      console.error("Error saving data:", error);
+      console.error('Error saving data:', error);
     }
   };
 
@@ -63,7 +60,7 @@ export default function Departments() {
   const handleEdit = (dept) => {
     setFormData({
       name: dept.name,
-      description: dept.description
+      description: dept.description,
     });
     setEditingId(dept.department_id);
     setShowModal(true);
@@ -71,28 +68,27 @@ export default function Departments() {
 
   // Delete
   const handleDelete = async (id) => {
-    if (!window.confirm("Yakin ingin menghapus data ini?")) return;
+    if (!window.confirm('Yakin ingin menghapus data ini?')) return;
 
     try {
-      await axios.delete(`http://localhost:4000/api/departments/${id}`);
+      await axios.delete(`http://localhost:4000/api/admin/departments/${id}`);
       fetchDepartments();
     } catch (error) {
-      console.error("Error deleting data:", error);
+      console.error('Error deleting data:', error);
     }
   };
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className='d-flex justify-content-between align-items-center mb-3'>
         <h3>Data Departemen</h3>
         <Button
-          variant="primary"
+          variant='primary'
           onClick={() => {
             setShowModal(true);
             setEditingId(null);
-            setFormData({ name: "", description: "" });
-          }}
-        >
+            setFormData({ name: '', description: '' });
+          }}>
           Tambah Departemen
         </Button>
       </div>
@@ -113,19 +109,10 @@ export default function Departments() {
               <td>{dept.name}</td>
               <td>{dept.description}</td>
               <td>
-                <Button
-                  variant="warning"
-                  size="sm"
-                  className="me-2"
-                  onClick={() => handleEdit(dept)}
-                >
+                <Button variant='warning' size='sm' className='me-2' onClick={() => handleEdit(dept)}>
                   Edit
                 </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => handleDelete(dept.department_id)}
-                >
+                <Button variant='danger' size='sm' onClick={() => handleDelete(dept.department_id)}>
                   Hapus
                 </Button>
               </td>
@@ -133,7 +120,7 @@ export default function Departments() {
           ))}
           {departments.length === 0 && (
             <tr>
-              <td colSpan="4" className="text-center">
+              <td colSpan='4' className='text-center'>
                 Tidak ada data.
               </td>
             </tr>
@@ -144,34 +131,26 @@ export default function Departments() {
       {/* Modal Tambah/Edit */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>
-            {editingId ? "Edit Departemen" : "Tambah Departemen"}
-          </Modal.Title>
+          <Modal.Title>{editingId ? 'Edit Departemen' : 'Tambah Departemen'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
+            <Form.Group className='mb-3'>
               <Form.Label>Nama Departemen</Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
+              <Form.Control type='text' name='name' value={formData.name} onChange={handleChange} required />
             </Form.Group>
-            <Form.Group className="mb-3">
+            <Form.Group className='mb-3'>
               <Form.Label>Deskripsi</Form.Label>
               <Form.Control
-                as="textarea"
-                name="description"
+                as='textarea'
+                name='description'
                 value={formData.description}
                 onChange={handleChange}
                 required
               />
             </Form.Group>
-            <Button type="submit" variant="success" className="w-100">
-              {editingId ? "Update" : "Simpan"}
+            <Button type='submit' variant='success' className='w-100'>
+              {editingId ? 'Update' : 'Simpan'}
             </Button>
           </Form>
         </Modal.Body>

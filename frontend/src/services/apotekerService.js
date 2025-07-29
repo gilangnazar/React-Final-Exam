@@ -11,3 +11,23 @@ export const getAllPatients = async () => {
     throw error;
   }
 };
+
+export const getAllPrescriptions = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/apoteker/prescriptions`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching resep obat:', error);
+    throw error;
+  }
+};
+
+export const updatePrescriptionStatus = async (pickup_id, picked_by) => {
+  try {
+    const response = await axios.put(`${API_URL}/apoteker/pickup/${pickup_id}`, { picked_by });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching resep obat:', error);
+    throw error;
+  }
+};
